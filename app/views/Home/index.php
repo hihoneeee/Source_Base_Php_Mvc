@@ -1,0 +1,1 @@
+<h1><?php echo htmlspecialchars($data['title']);; ?></h1>

@@ -1,5 +1,4 @@
 <?php
-
 class CreateUsersTable {
     private $db;
 
@@ -8,7 +7,6 @@ class CreateUsersTable {
     }
 
     public function up() {
-        // Tạo bảng users với khóa ngoại tham chiếu đến roles.id
         $sql = "CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(255) NOT NULL,
@@ -17,7 +15,7 @@ class CreateUsersTable {
             phone VARCHAR(15),
             avatar VARCHAR(255),
             password VARCHAR(255) NOT NULL,
-            role_id INT UNSIGNED,  -- Đảm bảo loại dữ liệu khớp với roles.id
+            role_id INT,  -- Đảm bảo loại dữ liệu khớp với roles.id
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL

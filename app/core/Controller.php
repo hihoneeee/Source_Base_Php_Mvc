@@ -2,14 +2,14 @@
 require_once './app/Helpers/UrlAction.php';
 
 class Controller {
-    // protected $UrlAction;
+    protected $UrlAction;
 
-    // public function __construct() {
-    //     $this->UrlAction = new UrlAction();
-    // }
+    public function __construct() {
+        $this->UrlAction = new UrlAction();
+    }
     protected function render($view, $data = []) {
         extract($data);
-        // $UrlAction = $this->UrlAction;
+        $UrlAction = $this->UrlAction;
 
         // Start output buffering
         ob_start();

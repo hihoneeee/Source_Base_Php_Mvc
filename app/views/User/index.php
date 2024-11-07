@@ -77,7 +77,6 @@
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <?php echo htmlspecialchars($user['id']); ?>
                 </td>
-                <td class="px-6 py-4"><?php echo htmlspecialchars($user['username']); ?></td>
                 <td class="px-6 py-4"><?php echo htmlspecialchars($user['first_name']); ?></td>
                 <td class="px-6 py-4"><?php echo htmlspecialchars($user['last_name']); ?></td>
                 <td class="px-6 py-4"><?php echo htmlspecialchars($user['email']); ?></td>

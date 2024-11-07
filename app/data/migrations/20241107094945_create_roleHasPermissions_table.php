@@ -14,9 +14,9 @@ class CreateRoleHasPermissionsTable {
                     permission_id INT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
-                    FOREIGN KEY (permission_id) REFERENCES permission(id) ON DELETE CASCADE
-        )";
+                    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+                    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+        ) ENGINE=INNODB";
 
         if ($this->db->query($sql)) {
             echo "Table 'roleHasPermissions' created successfully.\n";

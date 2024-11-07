@@ -1,5 +1,4 @@
 <?php
-
 class CreateRolesTable {
     private $db;
 
@@ -13,7 +12,7 @@ class CreateRolesTable {
             value VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )";
+        ) ENGINE=INNODB";
 
         if ($this->db->query($sql)) {
             echo "Table 'roles' created successfully.\n";

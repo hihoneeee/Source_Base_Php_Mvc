@@ -10,11 +10,8 @@ class UserController extends Controller {
 
     public function index() {
         $response = $this->_userService->getAllUsers();
-        if ($response->success) {
-            $this->render('User/index', ['users' => $response->data]);
-        } else {
-            $this->render('User/error', ['message' => $response->message]);
-        }
+        $this->render('User/index', ['users' => $response->data]);
+
     }
 
     public function delete($id) {

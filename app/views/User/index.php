@@ -22,10 +22,10 @@
 <h2 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl text-black">Quản lý
     người dùng</h2>
 <div class="flex items-center justify-between">
-    <button
+    <a href="<?php echo UrlAction::action('user', 'create'); ?>"
         class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
         Tạo mới
-    </button>
+    </a>
     <form class="w-[40%]">
         <label for="default-search"
             class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -85,7 +85,7 @@
                     <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
 
                     <!-- Delete Form -->
-                    <form action="/BasePhpMvc/user/delete/<?php echo $user['id']; ?>" method="POST"
+                    <form action="<?php echo UrlAction::action('user', 'delete', [$user['id']]); ?>" method="POST"
                         style="display: inline;">
                         <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline"
                             onclick="return confirm('Are you sure you want to delete this user?');">

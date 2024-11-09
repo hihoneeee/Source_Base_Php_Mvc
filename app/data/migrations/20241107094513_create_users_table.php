@@ -15,7 +15,7 @@ class CreateUsersTable {
             phone VARCHAR(15),
             avatar VARCHAR(255),
             password VARCHAR(255) NOT NULL,
-            role_id INT,  -- Đảm bảo loại dữ liệu khớp với roles.id
+            role_id INT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL

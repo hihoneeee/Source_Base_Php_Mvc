@@ -37,28 +37,18 @@ class UserService  {
         return $this->_userRepo->getUserById($id);
     }
 
-    public function createUser(UserDTO $userDTO) {
+    public function login(CreateUserDTO $createUserDTO) {
         $response = new ServiceResponse();
 
         try {
             // Kiểm tra nếu người dùng đã tồn tại
-            $existingUser = $this->_userRepo->getUserByUsername($userDTO->username);
+            $existingUser = $this->_userRepo->getUserByEmail($createUserDTO->email);
             if ($existingUser) {
                 ServiceResponseExtensions::setExisting($response, "User");
                 return $response;
-            }
-
-            // Tạo UserModel từ UserDTO
-            $newUser = new User(
-                $userDTO->username,
-                '',  // Tên mặc định
-                '',  // Họ mặc định
-                $userDTO->email
-            );
-
+            };
             // Thêm người dùng vào DB
-            $addedUser = $this->_userRepo->addUser($newUser);
-            $response->data = new UserDTO($addedUser->username, $addedUser->email);
+            $this->_userRepo->addUser($createUserDTO);
             ServiceResponseExtensions::setSuccess($response, "User created successfully");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());

@@ -34,25 +34,5 @@ class UserController extends Controller {
     }
 
     public function store() {
-        // Giả định dữ liệu được gửi từ form (POST request)
-        $username = $_POST['username'] ?? null;
-        $email = $_POST['email'] ?? null;
-
-        if (!$username || !$email) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Username and email are required.'
-            ]);
-            return;
-        }
-
-        // Khởi tạo UserDTO từ dữ liệu POST
-        $userDTO = new UserDTO($username, $email);
-
-        // Gọi service để tạo người dùng mới
-        $response = $this->_userService->createUser($userDTO);
-
-        // Trả về phản hồi JSON
-        echo json_encode($response->getData());
     }
 }

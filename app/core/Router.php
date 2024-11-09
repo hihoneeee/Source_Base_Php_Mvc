@@ -1,33 +1,38 @@
 <?php
 class Router {
     protected $routes = [];
+    protected $controllers = [];
 
-    // Thêm route với controller và action tương ứng
+    public function __construct($controllers) {
+        // Store controller instances
+        $this->controllers = $controllers;
+    }
+
+    // Add route with controller and action
     public function add($route, $params) {
         $this->routes[$route] = $params;
     }
 
-    // Phương thức dispatch, xác định route và gọi controller
+    // Dispatch method to determine route and call controller
     public function dispatch($url) {
         foreach ($this->routes as $route => $params) {
-            // Xử lý các route có tham số id động
-            $routePattern = preg_replace('/\{id\}/', '(\d+)', $route); // Chuyển {id} thành dãy số
+            $routePattern = preg_replace('/\{id\}/', '(\d+)', $route); // Convert {id} to digit sequence
 
             if (preg_match("#^$routePattern$#", $url, $matches)) {
                 $controllerName = $params['controller'];
                 $actionName = $params['action'];
-                
-                // Kiểm tra xem có `id` không
+
+                // Check if `id` is present
                 $id = $matches[1] ?? null;
 
-                if (class_exists($controllerName) && method_exists($controllerName, $actionName)) {
-                    $controller = new $controllerName($GLOBALS['userService']);
+                if (isset($this->controllers[$controllerName]) && method_exists($this->controllers[$controllerName], $actionName)) {
+                    $controller = $this->controllers[$controllerName];
 
-                    // Gọi action có hoặc không có tham số $id
+                    // Call action with or without $id
                     $id ? $controller->$actionName($id) : $controller->$actionName();
                     return;
                 } else {
-                    echo "Controller hoặc action không tồn tại";
+                    echo "Controller or action does not exist.";
                     return;
                 }
             }

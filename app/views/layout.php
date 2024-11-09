@@ -55,6 +55,11 @@
                                 class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
                                 aria-current="page">Người dùng</a>
                         </li>
+                        <li>
+                            <a href="<?php echo UrlAction::action('role', 'index'); ?>"
+                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
+                                aria-current="page">Vai trò</a>
+                        </li>
                     </ul>
                 </div>
             </div>

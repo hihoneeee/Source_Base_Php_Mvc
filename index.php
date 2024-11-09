@@ -8,10 +8,15 @@ require_once './app/core/Router.php';
 require_once './app/repositories/UserRepository.php';
 require_once './app/services/UserService.php';
 
+require_once './app/services/RoleService.php';
+require_once './app/repositories/RoleRepository.php';
+
 //đăng ký controller
 require_once './app/controllers/UserController.php';
 require_once './app/controllers/HomeController.php';
+require_once './app/controllers/RoleController.php';
 
+require_once './app/DTOs/Role/CreateRoleDTO.php';
 session_start();
 ob_start();
 
@@ -23,14 +28,24 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $userRepository = new UserRepository($db);
 $userService = new UserService($userRepository);
 
+$roleRepository = new RoleRepository($db);
+$roleService = new RoleService($roleRepository);
 
-// Khởi tạo Router với DB connection
-$router = new Router();
+// Register Controllers with their respective services
+$userController = new UserController($userService);
+$roleController = new RoleController($roleService);
 
-// Load các file router và truyền router vào
+// Initialize Router
+$router = new Router([
+    'UserController' => $userController,
+    'RoleController' => $roleController,
+]);
+
+// Load router files
 require_once './app/routers/Home.php';
 require_once './app/routers/User.php';
+require_once './app/routers/Role.php';
 
-// Lấy URL từ query string và dispatch route
+// Get URL from query string and dispatch route
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $router->dispatch($url);

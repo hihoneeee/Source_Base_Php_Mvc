@@ -71,6 +71,7 @@
             </tr>
         </thead>
         <tbody>
+            <?php if (!empty($users)): ?>
             <?php foreach ($users as $user): ?>
             <tr
                 class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -94,6 +95,12 @@
                 </td>
             </tr>
             <?php endforeach; ?>
+            <?php else: ?>
+            <tr>
+                <td colspan="5" class="text-center py-4">Không có người dùng nào!</td>
+            </tr>
+            <?php endif; ?>
+
 
         </tbody>
     </table>

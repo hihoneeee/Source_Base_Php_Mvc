@@ -1,4 +1,3 @@
 php run_migrations.php
-php run_migrations.php --rollback
 php run_migrations.php --drop-database
 php make_migration.php create_roles_table

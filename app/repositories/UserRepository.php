@@ -15,8 +15,10 @@ class UserRepository  {
         $stmt = $this->_db->prepare($query);
         $stmt->execute();
         
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $users ? $users : []; // Trả về mảng rỗng nếu không có kết quả
     }
+    
     
     public function getUserById($id) {
         $query = "SELECT u.*, r.value AS value

@@ -1,18 +1,15 @@
 <nav class="flex mb-4" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
         <li class="inline-flex items-center">
-            <a href="#" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 gap-2">
+            <a href="<?php echo UrlAction::action('home', 'index'); ?>"
+                class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 gap-2">
                 <i class="ri-home-4-fill"></i>
                 <span>Trang chủ</span>
             </a>
         </li>
         <li>
             <div class="flex items-center">
-                <svg class="w-3 h-3 text-gray-400 mx-1 rtl:rotate-180" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 9 4-4-4-4" />
-                </svg>
+                <i class="ri-arrow-right-s-line"></i>
                 <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Quản lý vai trò</span>
             </div>
         </li>
@@ -61,27 +58,34 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($roles as $role): ?>
-            <tr
-                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <?php echo htmlspecialchars($role['id']); ?>
-                </td>
-                <td class="px-6 py-4"><?php echo htmlspecialchars($role['value']); ?></td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
+            <?php if (!empty($roles)): ?>
+                <?php foreach ($roles as $role): ?>
+                    <tr
+                        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <?php echo htmlspecialchars($role['id']); ?>
+                        </td>
+                        <td class="px-6 py-4"><?php echo htmlspecialchars($role['value']); ?></td>
+                        <td class="px-6 py-4">
+                            <a href="<?php echo UrlAction::action('role', 'edit', [$role['id']]); ?>"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
+                            <!-- Delete Form -->
+                            <form action="<?php echo UrlAction::action('role', 'delete', [$role['id']]); ?>" method="POST"
+                                style="display: inline;">
+                                <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này không?');">
+                                    Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3" class="text-center py-4">Không có vai trò nào.</td>
+                </tr>
+            <?php endif; ?>
 
-                    <!-- Delete Form -->
-                    <form action="<?php echo UrlAction::action('role', 'delete', [$role['id']]); ?>" method="POST"
-                        style="display: inline;">
-                        <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                            onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này không?');">
-                            Xóa
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            <?php endforeach; ?>
 
         </tbody>
     </table>

@@ -36,24 +36,4 @@ class UserService  {
     public function getUserById($id) {
         return $this->_userRepo->getUserById($id);
     }
-
-    public function login(CreateUserDTO $createUserDTO) {
-        $response = new ServiceResponse();
-
-        try {
-            // Kiểm tra nếu người dùng đã tồn tại
-            $existingUser = $this->_userRepo->getUserByEmail($createUserDTO->email);
-            if ($existingUser) {
-                ServiceResponseExtensions::setExisting($response, "User");
-                return $response;
-            };
-            // Thêm người dùng vào DB
-            $this->_userRepo->addUser($createUserDTO);
-            ServiceResponseExtensions::setSuccess($response, "User created successfully");
-        } catch (Exception $ex) {
-            ServiceResponseExtensions::setError($response, $ex->getMessage());
-        }
-
-        return $response;
-    }
 }

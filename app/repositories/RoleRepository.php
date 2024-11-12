@@ -9,15 +9,54 @@ class RoleRepository
     {
         $this->_db = $db;
     }
-
-    public function getAllRoles()
+    public function getAllRoles(QueryParamsDTO $queryParams)
     {
-        $query = "SELECT r.id, r.value FROM roles r ORDER BY r.created_at DESC";
-        $stmt = $this->_db->prepare($query);
-        $stmt->execute();
+        // Calculate offset based on the current page and limit
+        $offset = ($queryParams->page - 1) * $queryParams->limit;
 
-        $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $roles ? $roles : []; // Trả về mảng rỗng nếu không có kết quả
+        // Build the main query with optional search
+        $query = "SELECT r.id, r.value FROM roles r";
+        if (!empty($queryParams->name)) {
+            $query .= " WHERE r.value LIKE :name";
+        }
+
+        // Add sorting and limit/offset for pagination
+        $query .= " ORDER BY r.created_at DESC LIMIT :limit OFFSET :offset";
+
+        // Prepare and bind parameters
+        $stmt = $this->_db->prepare($query);
+        if (!empty($queryParams->name)) {
+            $nameParam = '%' . $queryParams->name . '%';
+            $stmt->bindValue(':name', $nameParam, PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':limit', (int) $queryParams->limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+        // Execute the query and return results
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    public function getTotalRolesCount($name = null)
+    {
+        // Base query to count total roles
+        $query = "SELECT COUNT(*) as total FROM roles";
+        if (!empty($name)) {
+            $query .= " WHERE value LIKE :name";
+        }
+
+        // Prepare and bind parameters for search if applicable
+        $stmt = $this->_db->prepare($query);
+        if (!empty($name)) {
+            $nameParam = '%' . $name . '%';
+            $stmt->bindParam(':name', $nameParam, PDO::PARAM_STR);
+        }
+
+        // Execute the query and return total count
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result->total;
     }
 
 
@@ -29,7 +68,7 @@ class RoleRepository
         $stmt->bindParam(':created_at', $role->created_at);
         $stmt->bindParam(':updated_at', $role->updated_at);
         if ($stmt->execute()) {
-            $role->id = $this->_db->lastInsertId(); // Lấy ID mới sau khi thêm
+            $role->id = $this->_db->lastInsertId();
             return $role;
         }
         return null;
@@ -41,16 +80,16 @@ class RoleRepository
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     public function getRoleByValue($value)
     {
-        $query = "SELECT * FROM roles WHERE value = :value"; // Đảm bảo rằng cột value tồn tại
+        $query = "SELECT * FROM roles WHERE value = :value";
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':value', $value);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     public function updateRole($id, Role $role)

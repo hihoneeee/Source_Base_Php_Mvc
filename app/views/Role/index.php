@@ -22,24 +22,12 @@
         class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
         Tạo mới
     </a>
-    <form class="w-[40%]">
-        <label for="default-search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-            </div>
-            <input type="search" id="default-search"
-                class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search Mockups, Logos..." required />
-            <button type="submit"
-                class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
-        </div>
+    <form method="GET" action="/role">
+        <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>"
+            placeholder="Tìm kiếm theo tên...">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2">Tìm kiếm</button>
     </form>
+
 
 </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -59,34 +47,34 @@
         </thead>
         <tbody>
             <?php if (!empty($roles)): ?>
-                <?php foreach ($roles as $role): ?>
-                    <tr
-                        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <?php echo htmlspecialchars($role['id']); ?>
-                        </td>
-                        <td class="px-6 py-4"><?php echo htmlspecialchars($role['value']); ?></td>
-                        <td class="px-6 py-4">
-                            <a href="<?php echo UrlAction::action('role', 'edit', [$role['id']]); ?>"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
-                            <!-- Delete Form -->
-                            <form action="<?php echo UrlAction::action('role', 'delete', [$role['id']]); ?>" method="POST"
-                                style="display: inline;">
-                                <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này không?');">
-                                    Xóa
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+            <?php foreach ($roles as $role): ?>
+            <tr
+                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <?php echo htmlspecialchars($role->id); ?>
+                </td>
+                <td class="px-6 py-4"><?php echo htmlspecialchars($role->value); ?></td>
+                <td class="px-6 py-4">
+                    <a href="<?php echo UrlAction::action('role', 'edit', [$role->id]); ?>"
+                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
+                    <!-- Delete Form -->
+                    <form action="<?php echo UrlAction::action('role', 'delete', [$role->id]); ?>" method="POST"
+                        style="display: inline;">
+                        <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                            onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này không?');">
+                            Xóa
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
             <?php else: ?>
-                <tr>
-                    <td colspan="3" class="text-center py-4">Không có vai trò nào.</td>
-                </tr>
+            <tr>
+                <td colspan="3" class="text-center py-4">Không có vai trò nào.</td>
+            </tr>
             <?php endif; ?>
-
-
         </tbody>
+        <?php echo $paginationHelper->render(); ?>
+
     </table>
 </div>

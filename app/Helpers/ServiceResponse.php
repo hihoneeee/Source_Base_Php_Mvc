@@ -1,7 +1,8 @@
 <?php
 require_once './app/Helpers/EHttpType.php';
 
-class ServiceResponse {
+class ServiceResponse
+{
     public $message;
     public $data;
     public $accessToken;
@@ -12,19 +13,22 @@ class ServiceResponse {
     public $limit;
     public $page;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->success = false;
         $this->statusCode = EHttpType::InternalError;
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return [
             'success' => $this->success,
             'message' => $this->message
         ];
     }
 
-    public function getData() {
+    public function getData()
+    {
         return [
             'success' => $this->success,
             'message' => $this->message,
@@ -32,7 +36,8 @@ class ServiceResponse {
         ];
     }
 
-    public function getDataTotal() {
+    public function getDataTotal()
+    {
         return [
             'success' => $this->success,
             'message' => $this->message,

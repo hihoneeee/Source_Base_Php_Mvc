@@ -11,13 +11,18 @@ class RoleService
         $this->_roleRepo = $roleRepo;
     }
 
-    public function getAllRoles()
+    public function getAllRoles(QueryParamsDTO $queryParams)
     {
         $response = new ServiceResponse();
         try {
-            $roles = $this->_roleRepo->getAllRoles();
+            $roles = $this->_roleRepo->getAllRoles($queryParams);
+            $totalRoles = $this->_roleRepo->getTotalRolesCount($queryParams->name);
+
             $response->data = $roles;
-            ServiceResponseExtensions::setSuccess($response, "Role retrieved successfully");
+            $response->total = $totalRoles;
+            $response->page = $queryParams->page;
+            $response->limit = $queryParams->limit;
+            ServiceResponseExtensions::setSuccess($response, "Roles retrieved successfully");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }

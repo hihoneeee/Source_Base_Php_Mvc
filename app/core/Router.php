@@ -1,20 +1,24 @@
 <?php
-class Router {
+class Router
+{
     protected $routes = [];
     protected $controllers = [];
 
-    public function __construct($controllers) {
+    public function __construct($controllers)
+    {
         // Store controller instances
         $this->controllers = $controllers;
     }
 
     // Add route with controller and action
-    public function add($route, $params) {
+    public function add($route, $params)
+    {
         $this->routes[$route] = $params;
     }
 
     // Dispatch method to determine route and call controller
-    public function dispatch($url) {
+    public function dispatch($url)
+    {
         foreach ($this->routes as $route => $params) {
             $routePattern = preg_replace('/\{id\}/', '(\d+)', $route); // Convert {id} to digit sequence
 

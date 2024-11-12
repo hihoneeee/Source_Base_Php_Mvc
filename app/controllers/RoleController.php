@@ -1,5 +1,8 @@
 <?php
 require_once './app/core/Controller.php';
+require_once './app/DTOs/Common/QueryParamsDTO.php';
+require_once './app/DTOs/Common/PaginationDTO.php';
+require_once './app/Helpers/PaginationHelper.php';
 
 class RoleController extends Controller
 {
@@ -11,9 +14,28 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $response = $this->_roleService->getAllRoles();
-        $this->render('Role/index', ['roles' => $response->data]);
+        // Get `limit` and `page` from the query parameters
+        $limit = $_GET['limit'] ?? 2;
+        $page = $_GET['page'] ?? 1;
+        $name = $_GET['name'] ?? null;
+
+        $queryParams = new QueryParamsDTO($limit, $page, $name);
+        $response = $this->_roleService->getAllRoles($queryParams);
+
+        // Calculate total pages
+        $totalPages = ceil($response->total / $queryParams->limit);
+
+        $paginationDTO = new PaginationDTO($totalPages, $page);
+        $paginationHelper = new PaginationHelper($paginationDTO);
+        var_dump($page, $limit);
+        $this->render('Role/index', [
+            'roles' => $response->data,
+            'paginationHelper' => $paginationHelper,
+            'name' => $name,
+            'limit' => $limit
+        ]);
     }
+
     public function create()
     {
         $this->render('Role/form');
@@ -40,7 +62,6 @@ class RoleController extends Controller
         $response = $this->_roleService->getRoleById($id);
         if ($response->success) {
             $role = $response->data;
-            // var_dump($role); dùng để log data ra
             $this->render('Role/form', ['role' => $role]);
         } else {
             $this->render('Home/error', ['message' => 'Role not found']);

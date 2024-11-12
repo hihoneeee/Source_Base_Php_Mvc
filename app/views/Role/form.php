@@ -36,7 +36,7 @@
         </h2>
     </div>
     <form
-        action="<?php echo isset($role) ? UrlAction::action('role', 'update', [$role['id']]) : UrlAction::action('role', 'store'); ?>"
+        action="<?php echo isset($role) ? UrlAction::action('role', 'update', [$role->id]) : UrlAction::action('role', 'store'); ?>"
         method="post" class="p-4 space-y-4">
 
         <div>
@@ -44,7 +44,7 @@
 
             <input type="text" name="value" id="value" placeholder="Nhập tên vai trò..."
                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value="<?php echo htmlspecialchars($role['value'] ?? ''); ?>">
+                value="<?php echo htmlspecialchars($role->value ?? ''); ?>">
 
             <?php if (!empty($errors['value'])): ?>
                 <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['value']); ?></p>
@@ -60,4 +60,5 @@
                 class="bg-gray-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300">Hủy</a>
         </div>
     </form>
+
 </div>

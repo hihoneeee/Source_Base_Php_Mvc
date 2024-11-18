@@ -6,7 +6,7 @@ class QueryParamsDTO
     public ?int $page;
     public ?string $name;
 
-    public function __construct($limit = 2, $page = 1, $name = null)
+    public function __construct($limit, $page, $name)
     {
         $this->limit = $limit;
         $this->page = $page;

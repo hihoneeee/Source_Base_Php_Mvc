@@ -3,6 +3,7 @@ require_once './app/core/Controller.php';
 require_once './app/DTOs/Common/QueryParamsDTO.php';
 require_once './app/DTOs/Common/PaginationDTO.php';
 require_once './app/Helpers/PaginationHelper.php';
+require_once './app/DTOs/Role/GetRoleDTO.php';
 
 class RoleController extends Controller
 {
@@ -14,28 +15,27 @@ class RoleController extends Controller
     }
     public function index()
     {
-        // Get `limit` and `page` from the query parameters
-        $limit = $_GET['limit'] ?? 2;
-        $page = $_GET['page'] ?? 1;
-        $name = $_GET['name'] ?? null;
+        $limit = LIMIT;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $name = isset($_GET['name']) ? $_GET['name'] : '';
 
-        $queryParams = new QueryParamsDTO($limit, $page, $name);
-        $response = $this->_roleService->getAllRoles($queryParams);
+        $response = $this->_roleService->getAllRoles($limit, $page, $name);
+        $totalPages = ceil($response->total / $limit);
 
-        // Calculate total pages
-        $totalPages = ceil($response->total / $queryParams->limit);
+        $paginationDTO = new PaginationDTO($page, $totalPages, 'role');
 
-        $paginationDTO = new PaginationDTO($totalPages, $page);
-        $paginationHelper = new PaginationHelper($paginationDTO);
-        var_dump($page, $limit);
         $this->render('Role/index', [
             'roles' => $response->data,
-            'paginationHelper' => $paginationHelper,
-            'name' => $name,
-            'limit' => $limit
+            'paginationDTO' => $paginationDTO,
+            'name' => $name
         ]);
     }
-
+    public function detail($id)
+    {
+        $roleDTO = new GetRoleDTO();
+        $response = $this->_roleService->getRoleDetail($id, $roleDTO);
+        $this->render('Role/detail', ['role' => $response->data]);
+    }
     public function create()
     {
         $this->render('Role/form');

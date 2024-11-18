@@ -1,41 +1,48 @@
 <?php
 require_once './app/Helpers/ServiceResponse.php';
 
-class ServiceResponseExtensions {
+class ServiceResponseExtensions
+{
 
-    public static function setNotFound(ServiceResponse $response, $message) {
+    public static function setNotFound(ServiceResponse $response, $message)
+    {
         $response->success = false;
-        $response->message = "$message not found!";
+        $response->message = "$message không tìm thấy!";
         $response->statusCode = EHttpType::NotFound;
     }
 
-    public static function setUnauthorized(ServiceResponse $response, $message) {
+    public static function setUnauthorized(ServiceResponse $response, $message)
+    {
         $response->success = false;
         $response->message = $message;
         $response->statusCode = EHttpType::Unauthorized;
     }
 
-    public static function setBadRequest(ServiceResponse $response, $message) {
+    public static function setBadRequest(ServiceResponse $response, $message)
+    {
         $response->success = false;
         $response->message = $message;
         $response->statusCode = EHttpType::BadRequest;
     }
 
-    public static function setExisting(ServiceResponse $response, $message) {
+    public static function setExisting(ServiceResponse $response, $message)
+    {
         $response->success = false;
-        $response->message = "$message already exists!";
+        $response->message = "$message đã tồn tại!";
         $response->statusCode = EHttpType::Conflict;
     }
 
-    public static function setSuccess(ServiceResponse $response, $message) {
+    public static function setSuccess(ServiceResponse $response, $message)
+    {
         $response->success = true;
         $response->message = $message;
         $response->statusCode = EHttpType::Success;
     }
 
-    public static function setError(ServiceResponse $response, $message, $statusCode = EHttpType::InternalError) {
+    public static function setError(ServiceResponse $response, $message, $statusCode = EHttpType::InternalError)
+    {
         $response->success = false;
-        $response->message = "An unexpected error occurred: $message";
+        $response->message = "Đã xảy ra lỗi không mong muốn: $message";
         $response->statusCode = $statusCode;
     }
 }

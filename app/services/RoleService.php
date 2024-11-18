@@ -1,116 +1,128 @@
 <?php
 require_once './app/Helpers/ServiceResponse.php';
 require_once './app/Helpers/ServiceResponseExtensions.php';
+require_once './app/core/Mapper.php';
 
 class RoleService
 {
     private $_roleRepo;
+    private $_mapper;
 
-    public function __construct(RoleRepository $roleRepo)
+    public function __construct(RoleRepository $roleRepo, Mapper $mapper)
     {
         $this->_roleRepo = $roleRepo;
+        $this->_mapper = $mapper;
     }
 
-    public function getAllRoles(QueryParamsDTO $queryParams)
+    public function getAllRoles($limit, $page, $name)
     {
         $response = new ServiceResponse();
         try {
-            $roles = $this->_roleRepo->getAllRoles($queryParams);
-            $totalRoles = $this->_roleRepo->getTotalRolesCount($queryParams->name);
-
-            $response->data = $roles;
-            $response->total = $totalRoles;
-            $response->page = $queryParams->page;
-            $response->limit = $queryParams->limit;
-            ServiceResponseExtensions::setSuccess($response, "Roles retrieved successfully");
+            $data = $this->_roleRepo->getAllRoles($limit, $page, $name);
+            $response->data = $data['roles'];
+            $response->total = $data['total'];
+            $response->limit = $limit;
+            $response->page = $page;
+            ServiceResponseExtensions::setSuccess($response, "Lấy danh sách vai trò thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }
         return $response;
     }
-
     public function getRoleById($id)
     {
         $response = new ServiceResponse();
         try {
             $role = $this->_roleRepo->getRoleById($id);
             if ($role == null) {
-                ServiceResponseExtensions::setNotFound($response, "Role");
+                ServiceResponseExtensions::setNotFound($response, "Vai trò");
                 return $response;
             }
             $response->data = $role;
-            ServiceResponseExtensions::setSuccess($response, "Role retrieved successfully");
+            ServiceResponseExtensions::setSuccess($response, "Lấy vai trò thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }
         return $response;
     }
-
+    public function getRoleDetail($id, GetRoleDTO $getRoleDto)
+    {
+        $response = new ServiceResponse();
+        try {
+            $data = $this->_roleRepo->getRoleDetail($id);
+            if ($data == null) {
+                ServiceResponseExtensions::setNotFound($response, "Vai trò");
+                return $response;
+            }
+            $roleDTO = $this->_mapper->map($data['role'], $getRoleDto);
+            $roleDTO->dataUser = $data['users'];
+            $response->data = $roleDTO;
+            ServiceResponseExtensions::setSuccess($response, "Lấy chi tiết thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
     public function createRole(CreateRoleDTO $createRoleDTO)
     {
         $response = new ServiceResponse();
 
         try {
-            // Check if the role already exists
             $existingRole = $this->_roleRepo->getRoleByValue($createRoleDTO->value);
             if ($existingRole) {
-                ServiceResponseExtensions::setExisting($response, "Role");
+                ServiceResponseExtensions::setExisting($response, "Vai trò");
                 return $response;
             }
-
-            // Convert CreateRoleDTO to Role
-            $newRole = new Role(null, $createRoleDTO->value, date('Y-m-d H:i:s'), date('Y-m-d H:i:s'));
-
-            // Create the role
+            $role = new Role();
+            $newRole = $this->_mapper->map($createRoleDTO, $role);
             $this->_roleRepo->createRole($newRole);
-            ServiceResponseExtensions::setSuccess($response, "Role created successfully");
+            ServiceResponseExtensions::setSuccess($response, "Tạo mới vai trò thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }
         return $response;
     }
-
     public function updateRole($id, CreateRoleDTO $createRoleDTO)
     {
         $response = new ServiceResponse();
 
         try {
-            $role = $this->_roleRepo->getRoleById($id);
-            if ($role === null) {
-                ServiceResponseExtensions::setNotFound($response, "Role");
+            $checkRole = $this->_roleRepo->getRoleById($id);
+            if ($checkRole === null) {
+                ServiceResponseExtensions::setNotFound($response, "Vai trò");
                 return $response;
             }
-            if ($role->value === $createRoleDTO->value) {
-                $role->value === $role->value;
+            if ($checkRole->value === $createRoleDTO->value) {
+                $checkRole->value === $checkRole->value;
             } else {
                 $existingRole = $this->_roleRepo->getRoleByValue($createRoleDTO->value);
                 if ($existingRole) {
-                    ServiceResponseExtensions::setExisting($response, "Role");
+                    ServiceResponseExtensions::setExisting($response, "Vai trò");
                     return $response;
                 }
-                $role->value = $createRoleDTO->value;
+                $checkRole->value = $createRoleDTO->value;
             }
-            $role->updated_at = date('Y-m-d H:i:s');
-            $updateRole = new Role($role->id, $role->value, $role->created_at, $role->updated_at);
-            $this->_roleRepo->updateRole($id, $updateRole);
-            ServiceResponseExtensions::setSuccess($response, "Role updated successfully!");
+            $checkRole->updated_at = date('Y-m-d H:i:s');
+            $role = new Role();
+            $mapper = $this->_mapper->map($checkRole, $role);
+            $this->_roleRepo->updateRole($id, $mapper);
+            ServiceResponseExtensions::setSuccess($response, "Chỉnh sửa vai trò thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }
         return $response;
     }
-
     public function deleteRole($id)
     {
         $response = new ServiceResponse();
         try {
             $role = $this->_roleRepo->getRoleById($id);
             if ($role == null) {
-                ServiceResponseExtensions::setNotFound($response, "Role");
+                ServiceResponseExtensions::setNotFound($response, "Vai trò");
                 return $response;
             }
             $this->_roleRepo->deleteRoleById($id);
-            ServiceResponseExtensions::setSuccess($response, "Role deleted successfully!");
+            ServiceResponseExtensions::setSuccess($response, "Xóa vai trò thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }

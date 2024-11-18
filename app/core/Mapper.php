@@ -1,15 +1,20 @@
-<?php class Mapper {
-    public static function map($source, $destination) {
-        $sourceReflection = new ReflectionClass($source);
-        $destReflection = new ReflectionClass($destination);
+<?php
+class Mapper
+{
+    public static function map(object $source, object $destination): object
+    {
+        $sourceReflection = new ReflectionObject($source);
+        $destinationReflection = new ReflectionObject($destination);
 
-        foreach ($sourceReflection->getProperties() as $prop) {
-            $name = $prop->getName();
-            if ($destReflection->hasProperty($name)) {
-                $prop->setAccessible(true);
-                $destProp = $destReflection->getProperty($name);
-                $destProp->setAccessible(true);
-                $destProp->setValue($destination, $prop->getValue($source));
+        foreach ($destinationReflection->getProperties() as $property) {
+            $name = $property->getName();
+
+            if ($sourceReflection->hasProperty($name)) {
+                $sourceProperty = $sourceReflection->getProperty($name);
+                $sourceProperty->setAccessible(true);
+
+                $property->setAccessible(true);
+                $property->setValue($destination, $sourceProperty->getValue($source));
             }
         }
 

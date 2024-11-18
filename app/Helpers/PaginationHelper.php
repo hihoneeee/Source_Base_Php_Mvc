@@ -2,43 +2,44 @@
 
 class PaginationHelper
 {
-    private $paginationDTO;
-
-    public function __construct(PaginationDTO $paginationDTO)
+    public static function render(PaginationDTO $paginationDTO)
     {
-        $this->paginationDTO = $paginationDTO;
-    }
+        $currentPage = $paginationDTO->getCurrentPage();
+        $totalPages = $paginationDTO->getTotalPages();
 
-    public function render()
-    {
-        $output = '<nav aria-label="Page navigation">';
-        $output .= '<ul class="pagination">';
+        if ($totalPages > 1) {
+            echo '<nav aria-label="Page navigation example" class="flex justify-center">';
+            echo '<ul class="flex items-center -space-x-px h-8 text-sm">';
 
-        // Previous link
-        if ($this->paginationDTO->currentPage > 1) {
-            $output .= '<li class="page-item">';
-            $output .= '<a class="page-link" href="' . $this->paginationDTO->generateUrl($this->paginationDTO->currentPage - 1) . '">Previous</a>';
-            $output .= '</li>';
+            // Previous button
+            echo '<li>';
+            echo '<a href="' . $paginationDTO->generateUrl(1) . '" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
+            echo '<i class="ri-arrow-left-s-line"></i>';
+            echo '</a>';
+            echo '</li>';
+
+            // Page numbers
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $isActive = ($i == $currentPage)
+                    ? 'text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                    : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white';
+
+                echo '<li>';
+                echo '<a href="' . $paginationDTO->generateUrl($i) . '" class="flex items-center justify-center px-3 h-8 leading-tight ' . $isActive . '">';
+                echo $i;
+                echo '</a>';
+                echo '</li>';
+            }
+
+            // Next button
+            echo '<li>';
+            echo '<a href="' . $paginationDTO->generateUrl($totalPages) . '" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
+            echo '<i class="ri-arrow-right-s-line"></i>';
+            echo '</a>';
+            echo '</li>';
+
+            echo '</ul>';
+            echo '</nav>';
         }
-
-        // Page numbers
-        for ($i = 1; $i <= $this->paginationDTO->totalPages; $i++) {
-            $active = $i === $this->paginationDTO->currentPage ? 'active' : '';
-            $output .= '<li class="page-item ' . $active . '">';
-            $output .= '<a class="page-link" href="' . $this->paginationDTO->generateUrl($i) . '">' . $i . '</a>';
-            $output .= '</li>';
-        }
-
-        // Next link
-        if ($this->paginationDTO->currentPage < $this->paginationDTO->totalPages) {
-            $output .= '<li class="page-item">';
-            $output .= '<a class="page-link" href="' . $this->paginationDTO->generateUrl($this->paginationDTO->currentPage + 1) . '">Next</a>';
-            $output .= '</li>';
-        }
-
-        $output .= '</ul>';
-        $output .= '</nav>';
-
-        return $output;
     }
 }

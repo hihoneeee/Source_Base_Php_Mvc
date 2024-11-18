@@ -4,12 +4,22 @@ require_once './app/core/Controller.php';
 
 class HomeController extends Controller
 {
+    private $_roleService;
+    private $_userService;
+
+    public function __construct(RoleService $roleService, UserService $userService)
+    {
+        $this->_roleService = $roleService;
+        $this->_userService = $userService;
+    }
     public function index()
     {
-        $data = [
-            'title' => 'Trang chủ',
-        ];
-        $this->render('Home/index', ['data' => $data]);
+        $roles = $this->_roleService->getAllRoles($limit = 0, $page = 1, $name = null);
+        $users = $this->_userService->getAllUsers($limit = 0, $page = 1, $name = null);
+        $this->render('Home/index', [
+            'totalRoles' => $roles->total,
+            'totalUsers' => $users->total,
+        ]);
     }
 
     public function notFound()

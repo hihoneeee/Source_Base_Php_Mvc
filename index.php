@@ -17,6 +17,10 @@ require_once './app/controllers/HomeController.php';
 require_once './app/controllers/RoleController.php';
 
 require_once './app/DTOs/Role/CreateRoleDTO.php';
+require_once './app/DTOs/User/CreateUserDTO.php';
+
+require_once './app/core/Mapper.php';
+
 session_start();
 ob_start();
 
@@ -24,21 +28,25 @@ ob_start();
 $db = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+$mapper = new Mapper();
+
 // Khởi tạo Repository và Service
 $userRepository = new UserRepository($db);
-$userService = new UserService($userRepository);
+$userService = new UserService($userRepository, $mapper);
 
 $roleRepository = new RoleRepository($db);
-$roleService = new RoleService($roleRepository);
+$roleService = new RoleService($roleRepository, $mapper);
 
 // Register Controllers with their respective services
-$userController = new UserController($userService);
+$userController = new UserController($userService, $roleRepository);
 $roleController = new RoleController($roleService);
+$homeController = new HomeController($roleService, $userService);
 
 // Initialize Router
 $router = new Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
+    'HomeController' => $homeController,
 ]);
 
 // Load router files

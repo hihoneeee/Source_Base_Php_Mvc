@@ -2,24 +2,29 @@
 
 class PaginationDTO
 {
-    public $totalPages;
-    public $currentPage;
+    private $currentPage;
+    private $totalPages;
+    private $baseUrl;
 
-    public function __construct($totalPages, $currentPage)
+    public function __construct($currentPage, $totalPages, $baseUrl)
     {
-        $this->totalPages = $totalPages;
         $this->currentPage = $currentPage;
+        $this->totalPages = $totalPages;
+        $this->baseUrl = $baseUrl;
     }
 
-    // Method to generate URLs for pagination links
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
+
+    public function getTotalPages()
+    {
+        return $this->totalPages;
+    }
+
     public function generateUrl($page)
     {
-        $params = $_GET;
-        $params['page'] = $page;
-
-        // Remove 'url' parameter if it exists
-        unset($params['url']);
-
-        return '?' . http_build_query($params);
+        return BASE_URL . '/' . $this->baseUrl  . '?page=' . $page;
     }
 }

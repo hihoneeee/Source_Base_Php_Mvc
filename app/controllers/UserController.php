@@ -1,5 +1,12 @@
 <?php
-require_once './app/core/Controller.php';
+
+namespace App\controllers;
+
+use App\core\Controller;
+use App\DTOs\Common\PaginationDTO;
+use App\DTOs\User\CreateUserDTO;
+use App\repositories\RoleRepository;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
@@ -54,7 +61,7 @@ class UserController extends Controller
 
     public function store()
     {
-        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
+        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
         if (!$createUserDTO->isValid()) {
             $this->render('User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
             return;
@@ -82,7 +89,7 @@ class UserController extends Controller
 
     public function update($id)
     {
-        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
+        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
         if (!$createUserDTO->isValid()) {
             $this->render('User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
             return;

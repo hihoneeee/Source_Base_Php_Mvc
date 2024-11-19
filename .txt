@@ -1,3 +1,4 @@
-php run_migrations.php
-php run_migrations.php --drop-database
-php make_migration.php create_roles_table
+-- Thực hiện tạo mới các bảng vào DB: php run_migrations.php
+-- Xóa toàn bộ bảng trong DB: php run_migrations.php --drop-database
+-- Tạo mới một bảng tại migration: php make_migration.php create_roles_table
+-- chạy server: php -S 127.0.0.1:8000

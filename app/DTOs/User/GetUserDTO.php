@@ -1,5 +1,7 @@
 <?php
 
+namespace App\DTOs\User;
+
 class GetUserDTO
 {
     public $username;

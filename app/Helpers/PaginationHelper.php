@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Helpers;
+
+use App\DTOs\Common\PaginationDTO;
+
 class PaginationHelper
 {
     public static function render(PaginationDTO $paginationDTO)

@@ -1,9 +1,13 @@
 <?php
-require_once './app/models/User.php';
+
+namespace App\Repositories;
+
+use App\Data\Models\User;
+use PDO;
 
 class UserRepository
 {
-    protected $_db;
+    private $_db;
 
     public function __construct($db)
     {
@@ -21,13 +25,13 @@ class UserRepository
             $query .= " WHERE u.first_name LIKE :name OR u.last_name LIKE :name";
         }
 
-        $query .= " ORDER BY u.created_at DESC LIMIT :limit OFFSET :offset";
+        $query .= " ORDER BY u.updated_at DESC LIMIT :limit OFFSET :offset";
 
         $stmt = $this->_db->prepare($query);
 
         if (!empty($name)) {
             $nameParam = '%' . $name . '%';
-            $stmt->bindValue(':name', $nameParam, PDO::PARAM_STR);
+            $stmt->bindValue(':name', $nameParam, \PDO::PARAM_STR);
         }
 
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -66,12 +70,13 @@ class UserRepository
     }
     public function createUser(User $user)
     {
-        $query = "INSERT INTO users (first_name, last_name, email, role_id)
-                  VALUES (:first_name, :last_name, :email, :role_id)";
+        $query = "INSERT INTO users (first_name, last_name, email, password, role_id)
+                  VALUES (:first_name, :last_name, :email, :password, :role_id)";
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':first_name', $user->first_name);
         $stmt->bindParam(':last_name', $user->last_name);
         $stmt->bindParam(':email', $user->email);
+        $stmt->bindParam(':password', $user->password);
         $stmt->bindParam(':role_id', $user->role_id);
         if ($stmt->execute()) {
             $user->id = $this->_db->lastInsertId();

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\DTOs\Role;
+
 class GetRoleDTO
 {
     public $id;

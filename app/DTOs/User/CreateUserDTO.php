@@ -1,18 +1,22 @@
 <?php
 
+namespace App\DTOs\User;
+
 class CreateUserDTO
 {
     public $first_name;
     public $last_name;
     public $email;
+    public $password;
     public $role_id;
     public $errors = [];
 
-    public function __construct($first_name, $last_name, $email, $role_id)
+    public function __construct($first_name, $last_name, $email, $password, $role_id)
     {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->email = $email;
+        $this->password = $password;
         $this->role_id = $role_id;
     }
 
@@ -46,6 +50,12 @@ class CreateUserDTO
             $this->errors['role_id'] = 'Vai trò không được bỏ trống.';
         } elseif (!is_numeric($this->role_id)) {
             $this->errors['role_id'] = 'Vai trò phải là một số hợp lệ.';
+        }
+
+        if (empty($this->password)) {
+            $this->errors['password'] = 'Tên không được bỏ trống.';
+        } elseif (strlen($this->password) < 8) {
+            $this->errors['password'] = 'Mật khẩu cần lớn hơn 8 ký tự.';
         }
 
         return empty($this->errors);

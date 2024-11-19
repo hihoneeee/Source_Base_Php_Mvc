@@ -1,4 +1,5 @@
 <?php
+namespace App\DTOs\Role;
 
 class CreateRoleDTO {
     public $value;

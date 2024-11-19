@@ -1,3 +1,8 @@
+<?php
+
+use App\Helpers\UrlAction;
+?>
+
 <nav class="flex mb-4" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
         <li class="inline-flex items-center">
@@ -26,7 +31,8 @@
         </li>
     </ol>
 </nav>
-<h2 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl text-black">Quản lý người
+<h2 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl text-black">Quản lý
+    người
     dùng</h2>
 
 <div class="bg-white shadow-md rounded-lg overflow-hidden mt-10">
@@ -71,6 +77,17 @@
 
             <?php if (!empty($errors['email'])): ?>
                 <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
+            <?php endif; ?>
+        </div>
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="password">Mật khẩu</label>
+
+            <input type="text" name="password" id="password" placeholder="••••••••"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value="<?php echo htmlspecialchars($user->password ?? ''); ?>">
+
+            <?php if (!empty($errors['password'])): ?>
+                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
             <?php endif; ?>
         </div>
         <div>

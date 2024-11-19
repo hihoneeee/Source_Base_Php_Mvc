@@ -1,5 +1,6 @@
 <?php
-require_once './app/Helpers/EHttpType.php';
+namespace App\Helpers;
+
 
 class ServiceResponse
 {

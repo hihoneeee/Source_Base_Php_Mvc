@@ -1,5 +1,7 @@
 <?php
 
+namespace App\DTOs\Common;
+
 class PaginationDTO
 {
     private $currentPage;
@@ -25,6 +27,6 @@ class PaginationDTO
 
     public function generateUrl($page)
     {
-        return BASE_URL . '/' . $this->baseUrl  . '?page=' . $page;
+        return '/' . $this->baseUrl . '?page=' . $page;
     }
 }

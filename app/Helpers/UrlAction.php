@@ -1,10 +1,11 @@
 <?php
+namespace App\Helpers;
 
 class UrlAction
 {
     public static function action($controller, $action = 'index', $params = [])
     {
-        $url = BASE_URL . "/$controller";
+        $url = "/$controller";
 
         // Add the action if it’s not the default 'index' action
         if ($action !== 'index') {

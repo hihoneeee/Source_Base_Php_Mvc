@@ -1,3 +1,8 @@
+<?php
+
+use App\Helpers\UrlAction;
+?>
+
 <nav class="flex mb-4" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
         <li class="inline-flex items-center">
@@ -26,7 +31,8 @@
         </li>
     </ol>
 </nav>
-<h2 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl text-black">Quản lý người
+<h2 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl text-black">Quản lý
+    người
     dùng</h2>
 
 <div class="bg-white shadow-md rounded-lg overflow-hidden mt-10">

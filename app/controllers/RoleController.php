@@ -1,9 +1,10 @@
 <?php
-require_once './app/core/Controller.php';
-require_once './app/DTOs/Common/QueryParamsDTO.php';
-require_once './app/DTOs/Common/PaginationDTO.php';
-require_once './app/Helpers/PaginationHelper.php';
-require_once './app/DTOs/Role/GetRoleDTO.php';
+namespace App\controllers;
+
+use App\core\Controller;
+use App\DTOs\Common\PaginationDTO;
+use App\DTOs\Role;
+use App\Services\RoleService;
 
 class RoleController extends Controller
 {
@@ -32,7 +33,7 @@ class RoleController extends Controller
     }
     public function detail($id)
     {
-        $roleDTO = new GetRoleDTO();
+        $roleDTO = new Role\GetRoleDTO();
         $response = $this->_roleService->getRoleDetail($id, $roleDTO);
         $this->render('Role/detail', ['role' => $response->data]);
     }
@@ -42,7 +43,7 @@ class RoleController extends Controller
     }
     public function store()
     {
-        $createRoleDTO = new CreateRoleDTO($_POST['value']);
+        $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
         if (!$createRoleDTO->isValid()) {
             $this->render('Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
             return;
@@ -70,7 +71,7 @@ class RoleController extends Controller
 
     public function update($id)
     {
-        $createRoleDTO = new CreateRoleDTO($_POST['value']);
+        $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
 
         if (!$createRoleDTO->isValid()) {
             $this->render('Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);

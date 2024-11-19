@@ -1,6 +1,10 @@
 <?php
 
-require_once './app/core/Controller.php';
+namespace App\controllers;
+
+use App\core\Controller;
+use App\Services\RoleService;
+use App\Services\UserService;
 
 class HomeController extends Controller
 {

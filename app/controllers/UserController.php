@@ -1,5 +1,12 @@
 <?php
-require_once './app/core/Controller.php';
+
+namespace App\controllers;
+
+use App\core\Controller;
+use App\DTOs\Common\PaginationDTO;
+use App\DTOs\User\CreateUserDTO;
+use App\repositories\RoleRepository;
+use App\Services\UserService;
 
 class UserController extends Controller
 {

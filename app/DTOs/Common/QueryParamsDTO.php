@@ -1,5 +1,7 @@
 <?php
 
+namespace App\DTOs\Common;
+
 class QueryParamsDTO
 {
     public ?int $limit;

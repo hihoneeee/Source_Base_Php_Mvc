@@ -1,7 +1,16 @@
 <?php
-require_once './app/Helpers/ServiceResponse.php';
-require_once './app/Helpers/ServiceResponseExtensions.php';
-require_once './app/core/Mapper.php';
+
+namespace App\Services;
+
+use App\Repositories\RoleRepository;
+use App\Core\Mapper;
+use App\Helpers\ServiceResponse;
+use App\Helpers\ServiceResponseExtensions;
+use App\Data\Models\Role;
+use App\DTOs\Role as RoleDTO;
+
+
+use Exception;
 
 class RoleService
 {
@@ -45,7 +54,7 @@ class RoleService
         }
         return $response;
     }
-    public function getRoleDetail($id, GetRoleDTO $getRoleDto)
+    public function getRoleDetail($id, RoleDTO\GetRoleDTO $getRoleDto)
     {
         $response = new ServiceResponse();
         try {
@@ -63,7 +72,7 @@ class RoleService
         }
         return $response;
     }
-    public function createRole(CreateRoleDTO $createRoleDTO)
+    public function createRole(RoleDTO\CreateRoleDTO $createRoleDTO)
     {
         $response = new ServiceResponse();
 
@@ -82,7 +91,7 @@ class RoleService
         }
         return $response;
     }
-    public function updateRole($id, CreateRoleDTO $createRoleDTO)
+    public function updateRole($id, RoleDTO\CreateRoleDTO $createRoleDTO)
     {
         $response = new ServiceResponse();
 

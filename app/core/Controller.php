@@ -1,5 +1,8 @@
 <?php
-require_once './app/Helpers/UrlAction.php';
+
+namespace App\core;
+
+use App\Helpers\UrlAction;
 
 class Controller
 {
@@ -25,12 +28,8 @@ class Controller
 
     protected function redirectToAction($controller, $action = 'index')
     {
-        $baseUrl = BASE_URL; // Đảm bảo BASE_URL được định nghĩa trong config
-
-        // Nếu action là 'index', bỏ qua action khỏi URL
-        $url = $action === 'index' ? "{$baseUrl}/{$controller}" : "{$baseUrl}/{$controller}/{$action}";
-
+        $url = $action === 'index' ? "/$controller" : "/$controller/$action";
         header("Location: $url");
-        exit; // Dừng xử lý sau khi redirect
+        exit;
     }
 }

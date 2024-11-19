@@ -1,4 +1,6 @@
 <?php
+namespace App\Helpers;
+
 require_once './app/Helpers/ServiceResponse.php';
 
 class ServiceResponseExtensions

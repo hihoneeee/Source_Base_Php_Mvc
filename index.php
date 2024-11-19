@@ -1,26 +1,21 @@
 <?php
-// đăng ký tệp hệ thống
-require_once './config/config.php';
-require_once './app/core/Controller.php';
-require_once './app/core/Router.php';
 
-// đăng ký Repo và services
-require_once './app/repositories/UserRepository.php';
-require_once './app/services/UserService.php';
+// Nếu file tồn tại (tĩnh như CSS, JS, hình ảnh), trả về trực tiếp
+if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . '/' . $_SERVER['REQUEST_URI'])) {
+    return false;
+}
 
-require_once './app/services/RoleService.php';
-require_once './app/repositories/RoleRepository.php';
+require_once './vendor/autoload.php';
+require_once './Config/Config.php';
 
-//đăng ký controller
-require_once './app/controllers/UserController.php';
-require_once './app/controllers/HomeController.php';
-require_once './app/controllers/RoleController.php';
+use App\Core;
+use App\Repositories;
+use App\Services;
+use App\Controllers;
+use App\Routers;
 
-require_once './app/DTOs/Role/CreateRoleDTO.php';
-require_once './app/DTOs/User/CreateUserDTO.php';
 
-require_once './app/core/Mapper.php';
-
+// Khởi tạo session và buffer
 session_start();
 ob_start();
 
@@ -28,32 +23,34 @@ ob_start();
 $db = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$mapper = new Mapper();
+// Khởi tạo Mapper
+$mapper = new Core\Mapper();
 
 // Khởi tạo Repository và Service
-$userRepository = new UserRepository($db);
-$userService = new UserService($userRepository, $mapper);
+$userRepository = new Repositories\UserRepository($db);
+$userService = new Services\UserService($userRepository, $mapper);
 
-$roleRepository = new RoleRepository($db);
-$roleService = new RoleService($roleRepository, $mapper);
+$roleRepository = new Repositories\RoleRepository($db);
+$roleService = new Services\RoleService($roleRepository, $mapper);
 
-// Register Controllers with their respective services
-$userController = new UserController($userService, $roleRepository);
-$roleController = new RoleController($roleService);
-$homeController = new HomeController($roleService, $userService);
+// Khởi tạo Controller với Service tương ứng
+$userController = new Controllers\UserController($userService, $roleRepository);
+$roleController = new Controllers\RoleController($roleService);
+$homeController = new Controllers\HomeController($roleService, $userService);
 
-// Initialize Router
-$router = new Router([
+// Khởi tạo Router và đăng ký Controller
+$router = new Core\Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
     'HomeController' => $homeController,
 ]);
 
-// Load router files
-require_once './app/routers/Home.php';
-require_once './app/routers/User.php';
-require_once './app/routers/Role.php';
+// Đăng ký các route
+Routers\HomeRouter::register($router);
+Routers\UserRouter::register($router);
+Routers\RoleRouter::register($router);
 
-// Get URL from query string and dispatch route
-$url = isset($_GET['url']) ? $_GET['url'] : '';
+// Lấy URL và xử lý routing
+$url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$url = ltrim($url, '/');
 $router->dispatch($url);

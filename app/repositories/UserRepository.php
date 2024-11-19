@@ -1,5 +1,9 @@
 <?php
-require_once './app/models/User.php';
+
+namespace App\Repositories;
+
+use App\Data\Models\User;
+use PDO;
 
 class UserRepository
 {
@@ -21,13 +25,13 @@ class UserRepository
             $query .= " WHERE u.first_name LIKE :name OR u.last_name LIKE :name";
         }
 
-        $query .= " ORDER BY u.created_at DESC LIMIT :limit OFFSET :offset";
+        $query .= " ORDER BY u.updated_at DESC LIMIT :limit OFFSET :offset";
 
         $stmt = $this->_db->prepare($query);
 
         if (!empty($name)) {
             $nameParam = '%' . $name . '%';
-            $stmt->bindValue(':name', $nameParam, PDO::PARAM_STR);
+            $stmt->bindValue(':name', $nameParam, \PDO::PARAM_STR);
         }
 
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);

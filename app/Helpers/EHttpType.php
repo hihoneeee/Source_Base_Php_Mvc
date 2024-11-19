@@ -1,4 +1,5 @@
 <?php
+namespace App\Helpers;
 
 class EHttpType {
     const Success = 200;

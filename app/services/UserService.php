@@ -1,6 +1,16 @@
 <?php
-require_once './app/Helpers/ServiceResponse.php';
-require_once './app/Helpers/ServiceResponseExtensions.php';
+
+namespace App\Services;
+
+use App\Repositories\UserRepository;
+use App\Core\Mapper;
+use App\Helpers\ServiceResponse;
+use App\Helpers\ServiceResponseExtensions;
+use App\Data\Models\User;
+use App\DTOs\User as UserDTO;
+
+
+use Exception;
 
 class UserService
 {
@@ -63,7 +73,7 @@ class UserService
         return $response;
     }
 
-    public function createUser(CreateUserDTO $createUserDTO)
+    public function createUser(UserDTO\CreateUserDTO $createUserDTO)
     {
         $response = new ServiceResponse();
 
@@ -82,7 +92,7 @@ class UserService
         }
         return $response;
     }
-    public function updateUser($id, CreateUserDTO $createUserDTO)
+    public function updateUser($id, UserDTO\CreateUserDTO $createUserDTO)
     {
         $response = new ServiceResponse();
 

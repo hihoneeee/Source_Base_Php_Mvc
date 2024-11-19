@@ -1,4 +1,9 @@
 <?php
+
+namespace App\Core;
+
+use ReflectionObject;
+
 class Mapper
 {
     public static function map(object $source, object $destination): object

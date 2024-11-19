@@ -1,5 +1,9 @@
 <?php
-require_once './app/models/Role.php';
+
+namespace App\Repositories;
+
+use App\Data\Models\Role;
+use PDO;
 
 class RoleRepository
 {
@@ -18,7 +22,7 @@ class RoleRepository
         if (!empty($name)) {
             $query .= " WHERE r.value LIKE :name";
         }
-        $query .= " ORDER BY r.created_at DESC LIMIT :limit OFFSET :offset";
+        $query .= " ORDER BY r.updated_at DESC LIMIT :limit OFFSET :offset";
         $stmt = $this->_db->prepare($query);
         if (!empty($name)) {
             $nameParam = '%' . $name . '%';

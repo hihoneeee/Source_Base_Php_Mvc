@@ -4,5 +4,8 @@
       "App\\": "App/"
     }
   },
-  "require": {}
+  "require": {
+    "ircmaxell/password-compat": "^1.0",
+    "firebase/php-jwt": "^6.10"
+  }
 }

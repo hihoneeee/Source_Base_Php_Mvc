@@ -7,7 +7,7 @@ use PDO;
 
 class UserRepository
 {
-    protected $_db;
+    private $_db;
 
     public function __construct($db)
     {
@@ -70,12 +70,13 @@ class UserRepository
     }
     public function createUser(User $user)
     {
-        $query = "INSERT INTO users (first_name, last_name, email, role_id)
-                  VALUES (:first_name, :last_name, :email, :role_id)";
+        $query = "INSERT INTO users (first_name, last_name, email, password, role_id)
+                  VALUES (:first_name, :last_name, :email, :password, :role_id)";
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':first_name', $user->first_name);
         $stmt->bindParam(':last_name', $user->last_name);
         $stmt->bindParam(':email', $user->email);
+        $stmt->bindParam(':password', $user->password);
         $stmt->bindParam(':role_id', $user->role_id);
         if ($stmt->execute()) {
             $user->id = $this->_db->lastInsertId();

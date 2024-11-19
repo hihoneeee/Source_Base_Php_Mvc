@@ -7,7 +7,7 @@ use PDO;
 
 class RoleRepository
 {
-    protected $_db;
+    private $_db;
 
     public function __construct($db)
     {

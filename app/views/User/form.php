@@ -80,6 +80,17 @@ use App\Helpers\UrlAction;
             <?php endif; ?>
         </div>
         <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="password">Mật khẩu</label>
+
+            <input type="text" name="password" id="password" placeholder="••••••••"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value="<?php echo htmlspecialchars($user->password ?? ''); ?>">
+
+            <?php if (!empty($errors['password'])): ?>
+                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
+            <?php endif; ?>
+        </div>
+        <div>
             <label class="block text-gray-700 font-semibold mb-2" for="role">Vai trò</label>
             <select name="role_id" id="role"
                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">

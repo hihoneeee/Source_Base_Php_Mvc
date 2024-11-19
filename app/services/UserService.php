@@ -8,8 +8,8 @@ use App\Helpers\ServiceResponse;
 use App\Helpers\ServiceResponseExtensions;
 use App\Data\Models\User;
 use App\DTOs\User as UserDTO;
-
-
+use App\Helpers\HashPassword;
+use App\Helpers\JwtToken;
 use Exception;
 
 class UserService
@@ -83,6 +83,7 @@ class UserService
                 ServiceResponseExtensions::setExisting($response, "Người dùng");
                 return $response;
             }
+            $createUserDTO->password = HashPassword::GenerateHash($createUserDTO->password);
             $user = new User();
             $newUser = $this->_mapper->map($createUserDTO, $user);
             $this->_userRepo->createUser($newUser);

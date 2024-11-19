@@ -13,7 +13,9 @@ use App\Repositories;
 use App\Services;
 use App\Controllers;
 use App\Routers;
-
+use App\Helpers\JwtToken;
+use App\Middlewares\AuthMiddleware;
+use App\Middlewares\HandleMiddleware;
 
 // Khởi tạo session và buffer
 session_start();
@@ -26,6 +28,8 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Khởi tạo Mapper
 $mapper = new Core\Mapper();
 
+// Cấu hình JWT
+
 // Khởi tạo Repository và Service
 $userRepository = new Repositories\UserRepository($db);
 $userService = new Services\UserService($userRepository, $mapper);
@@ -33,22 +37,38 @@ $userService = new Services\UserService($userRepository, $mapper);
 $roleRepository = new Repositories\RoleRepository($db);
 $roleService = new Services\RoleService($roleRepository, $mapper);
 
+// Khởi tạo hepler
+$jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
+
+$authService = new Services\AuthService($userRepository, $jwtToken, $roleRepository);
+
 // Khởi tạo Controller với Service tương ứng
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
 $homeController = new Controllers\HomeController($roleService, $userService);
+$authController = new Controllers\AuthController($authService);
+
+
+// Khởi tạo middleware
+$authMiddleware = new AuthMiddleware();
+$middleware = new HandleMiddleware($jwtToken);
+
+$middleware->handle();
+$authMiddleware->handle();
 
 // Khởi tạo Router và đăng ký Controller
 $router = new Core\Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
     'HomeController' => $homeController,
+    'AuthController' => $authController,
 ]);
 
 // Đăng ký các route
 Routers\HomeRouter::register($router);
 Routers\UserRouter::register($router);
 Routers\RoleRouter::register($router);
+Routers\AuthRouter::register($router);
 
 // Lấy URL và xử lý routing
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

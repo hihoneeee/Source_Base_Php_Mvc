@@ -6,7 +6,7 @@ use App\core\Controller;
 use App\Services\RoleService;
 use App\Services\UserService;
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
     private $_roleService;
     private $_userService;
@@ -20,7 +20,7 @@ class HomeController extends Controller
     {
         $roles = $this->_roleService->getAllRoles($limit = 0, $page = 1, $name = null);
         $users = $this->_userService->getAllUsers($limit = 0, $page = 1, $name = null);
-        $this->render('Home/index', [
+        $this->render('Admin', 'Home/index', [
             'totalRoles' => $roles->total,
             'totalUsers' => $users->total,
         ]);
@@ -28,6 +28,6 @@ class HomeController extends Controller
 
     public function notFound()
     {
-        $this->render('Home/notFound');
+        $this->render('Admin', 'Home/notFound');
     }
 }

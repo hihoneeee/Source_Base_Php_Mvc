@@ -1,4 +1,5 @@
 <?php
+
 namespace App\controllers;
 
 use App\core\Controller;
@@ -25,7 +26,7 @@ class RoleController extends Controller
 
         $paginationDTO = new PaginationDTO($page, $totalPages, 'role');
 
-        $this->render('Role/index', [
+        $this->render('Admin', 'Role/index', [
             'roles' => $response->data,
             'paginationDTO' => $paginationDTO,
             'name' => $name
@@ -35,26 +36,26 @@ class RoleController extends Controller
     {
         $roleDTO = new Role\GetRoleDTO();
         $response = $this->_roleService->getRoleDetail($id, $roleDTO);
-        $this->render('Role/detail', ['role' => $response->data]);
+        $this->render('Admin', 'Role/detail', ['role' => $response->data]);
     }
     public function create()
     {
-        $this->render('Role/form');
+        $this->render('Admin', 'Role/form');
     }
     public function store()
     {
         $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
         if (!$createRoleDTO->isValid()) {
-            $this->render('Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
+            $this->render('Admin', 'Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
             return;
         }
         $response = $this->_roleService->createRole($createRoleDTO);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('role', 'index');
+            $this->redirectToAction('admin', 'role', 'index');
         } else {
-            $this->redirectToAction('role', 'create');
+            $this->redirectToAction('admin', 'role', 'create');
         }
     }
 
@@ -63,9 +64,9 @@ class RoleController extends Controller
         $response = $this->_roleService->getRoleById($id);
         if ($response->success) {
             $role = $response->data;
-            $this->render('Role/form', ['role' => $role]);
+            $this->render('Admin', 'Role/form', ['role' => $role]);
         } else {
-            $this->render('Home/error', ['message' => 'Role not found']);
+            $this->render('Admin', 'Home/error', ['message' => 'Role not found']);
         }
     }
 
@@ -74,7 +75,7 @@ class RoleController extends Controller
         $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
 
         if (!$createRoleDTO->isValid()) {
-            $this->render('Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
+            $this->render('Admin', 'Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
             return;
         }
 
@@ -83,9 +84,9 @@ class RoleController extends Controller
         $_SESSION['toastSuccess'] = $response->success;
 
         if ($response->success) {
-            $this->redirectToAction('role', 'index');
+            $this->redirectToAction('admin', 'role', 'index');
         } else {
-            $this->redirectToAction('role', 'edit', ['id' => $id]);
+            $this->redirectToAction('admin', 'role', 'edit', ['id' => $id]);
         }
     }
 
@@ -95,9 +96,9 @@ class RoleController extends Controller
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('role', 'index');
+            $this->redirectToAction('admin', 'role', 'index');
         } else {
-            $this->redirectToAction('home', '404');
+            $this->redirectToAction('admin', 'home', '404');
         }
     }
 }

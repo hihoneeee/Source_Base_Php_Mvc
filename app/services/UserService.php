@@ -93,7 +93,7 @@ class UserService
         }
         return $response;
     }
-    public function updateUser($id, UserDTO\CreateUserDTO $createUserDTO)
+    public function updateUser($id, UserDTO\UpdateUserDTO $updateUserDTO)
     {
         $response = new ServiceResponse();
 
@@ -103,19 +103,19 @@ class UserService
                 ServiceResponseExtensions::setNotFound($response, "Người dùng");
                 return $response;
             }
-            if ($checkUser->email === $createUserDTO->email) {
+            if ($checkUser->email === $updateUserDTO->email) {
                 $checkUser->email === $checkUser->email;
             } else {
-                $existingEmail = $this->_userRepo->getUserByEmail($createUserDTO->email);
+                $existingEmail = $this->_userRepo->getUserByEmail($updateUserDTO->email);
                 if ($existingEmail) {
                     ServiceResponseExtensions::setExisting($response, "Người dùng");
                     return $response;
                 }
-                $checkUser->email = $createUserDTO->email;
+                $checkUser->email = $updateUserDTO->email;
             }
-            $checkUser->first_name = $createUserDTO->first_name;
-            $checkUser->last_name = $createUserDTO->last_name;
-            $checkUser->role_id = $createUserDTO->role_id;
+            $checkUser->first_name = $updateUserDTO->first_name;
+            $checkUser->last_name = $updateUserDTO->last_name;
+            $checkUser->role_id = $updateUserDTO->role_id;
             $checkUser->updated_at = date('Y-m-d H:i:s');
             $user = new User();
             $mapper = $this->_mapper->map($checkUser, $user);

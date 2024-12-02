@@ -8,7 +8,7 @@ use App\Helpers\UrlAction;
         <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md">
             <div class="text-4xl font-bold"><?= $totalUsers ?></div>
             <div class="mt-2">Tổng số vai trò</div>
-            <a href="<?php echo UrlAction::action('user', 'index'); ?>"
+            <a href="<?php echo UrlAction::action('admin', 'user', 'index'); ?>"
                 class="text-white underline mt-4 inline-block">Xem thêm &rarr;</a>
         </div>
 
@@ -16,7 +16,7 @@ use App\Helpers\UrlAction;
         <div class="bg-green-500 text-white p-4 rounded-lg shadow-md">
             <div class="text-4xl font-bold"><?= $totalRoles ?></div>
             <div class="mt-2">Tổng số người dùng</div>
-            <a href="<?php echo UrlAction::action('role', 'index'); ?>"
+            <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
                 class="text-white underline mt-4 inline-block">Xem thêm &rarr;</a>
         </div>
 

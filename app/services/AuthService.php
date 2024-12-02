@@ -55,15 +55,9 @@ class AuthService
                 $existingEmail->role_id,
                 $expireTime
             );
-
-            setcookie('TestToken', $accessToken, [
-                'expires' => $expireTime,
-                'path' => '/',
-                'httponly' => true,
-                'secure' => true,
-            ]);
-
-            ServiceResponseExtensions::setSuccess($response, "Login successfully!");
+            $response->accessToken = $accessToken;
+            $response->expireTime = $expireTime;
+            ServiceResponseExtensions::setSuccess($response, "Đăng nhập thành công!");
         } catch (Exception $ex) {
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }

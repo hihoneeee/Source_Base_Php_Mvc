@@ -12,7 +12,9 @@ use App\Core;
 use App\Repositories;
 use App\Services;
 use App\Controllers;
-use App\Routers;
+use App\Routers\Admin as RouterAdmin;
+use App\Routers\Public as RouterPublic;
+
 use App\Helpers\JwtToken;
 use App\Middlewares\AuthMiddleware;
 use App\Middlewares\HandleMiddleware;
@@ -45,9 +47,10 @@ $authService = new Services\AuthService($userRepository, $jwtToken, $roleReposit
 // Khởi tạo Controller với Service tương ứng
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
-$homeController = new Controllers\HomeController($roleService, $userService);
+$adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
 
+$publicController = new Controllers\PublicController();
 
 // Khởi tạo middleware
 $authMiddleware = new AuthMiddleware();
@@ -60,15 +63,19 @@ $authMiddleware->handle();
 $router = new Core\Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
-    'HomeController' => $homeController,
+    'AdminController' => $adminController,
     'AuthController' => $authController,
+
+    'PublicController' => $publicController
 ]);
 
 // Đăng ký các route
-Routers\HomeRouter::register($router);
-Routers\UserRouter::register($router);
-Routers\RoleRouter::register($router);
-Routers\AuthRouter::register($router);
+RouterAdmin\AdminRouter::register($router);
+RouterAdmin\UserRouter::register($router);
+RouterAdmin\RoleRouter::register($router);
+RouterAdmin\AuthRouter::register($router);
+
+RouterPublic\PublicRouter::register($router);
 
 // Lấy URL và xử lý routing
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

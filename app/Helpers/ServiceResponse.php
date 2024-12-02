@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 
@@ -13,7 +14,7 @@ class ServiceResponse
     public $total;
     public $limit;
     public $page;
-
+    public $expireTime;
     public function __construct()
     {
         $this->success = false;

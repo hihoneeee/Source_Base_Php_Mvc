@@ -16,13 +16,11 @@ class AuthService
 {
     private $_userRepo;
     private $_jwtToken;
-    private $_roleRepo;
 
-    public function __construct(UserRepository $userRepo, JwtToken $jwtToken, RoleRepository $roleRepo)
+    public function __construct(UserRepository $userRepo, JwtToken $jwtToken)
     {
         $this->_userRepo = $userRepo;
         $this->_jwtToken = $jwtToken;
-        $this->_roleRepo = $roleRepo;
     }
 
     public function login(AuthLoginDTO $loginDTO)
@@ -37,11 +35,6 @@ class AuthService
 
             if (!HashPassword::VerifyPassword($loginDTO->password, $existingEmail->password)) {
                 ServiceResponseExtensions::setUnauthorized($response, "Mật khẩu không đúng!");
-                return $response;
-            }
-            $checkRole = $this->_roleRepo->getRoleById($existingEmail->role_id);
-            if ($checkRole->value === 'User') {
-                ServiceResponseExtensions::setUnauthorized($response, "Bạn không có quyền hạn này!");
                 return $response;
             }
 

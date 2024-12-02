@@ -39,16 +39,21 @@ $userService = new Services\UserService($userRepository, $mapper);
 $roleRepository = new Repositories\RoleRepository($db);
 $roleService = new Services\RoleService($roleRepository, $mapper);
 
+$fakeDataRepository = new Repositories\FakeDataRepository($db);
+$fakeDataService = new Services\FakeDataService($fakeDataRepository);
+
+
 // Khởi tạo hepler
 $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 
-$authService = new Services\AuthService($userRepository, $jwtToken, $roleRepository);
+$authService = new Services\AuthService($userRepository, $jwtToken);
 
 // Khởi tạo Controller với Service tương ứng
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
 $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
+$fakeDataController = new Controllers\FakeDataController($fakeDataService);
 
 $publicController = new Controllers\PublicController();
 
@@ -65,6 +70,7 @@ $router = new Core\Router([
     'RoleController' => $roleController,
     'AdminController' => $adminController,
     'AuthController' => $authController,
+    'FakeDataController' => $fakeDataController,
 
     'PublicController' => $publicController
 ]);
@@ -74,6 +80,7 @@ RouterAdmin\AdminRouter::register($router);
 RouterAdmin\UserRouter::register($router);
 RouterAdmin\RoleRouter::register($router);
 RouterAdmin\AuthRouter::register($router);
+RouterAdmin\FakerDataRouter::register($router);
 
 RouterPublic\PublicRouter::register($router);
 

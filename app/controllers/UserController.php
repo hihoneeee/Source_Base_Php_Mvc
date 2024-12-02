@@ -42,36 +42,36 @@ class UserController extends Controller
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
-            $this->redirectToAction('home', '404');
+            $this->redirectToAction('admin', 'home', '404');
         }
     }
 
     public function show($id)
     {
         $user = $this->_userService->getUserById($id);
-        $this->render('User/show', ['user' => $user]);
+        $this->render('Admin', 'User/show', ['user' => $user]);
     }
 
     public function create()
     {
         $dataRole = $this->_roleRepo->getListRole();
-        $this->render('User/form', ['roles' => $dataRole]);
+        $this->render('Admin', 'User/form', ['roles' => $dataRole]);
     }
 
     public function store()
     {
         $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
         if (!$createUserDTO->isValid()) {
-            $this->render('User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
             return;
         }
         $response = $this->_userService->createUser($createUserDTO);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
             $this->redirectToAction('user', 'create');
         }
@@ -82,9 +82,9 @@ class UserController extends Controller
         if ($response->success) {
             $dataRole = $this->_roleRepo->getListRole();
             $user = $response->data;
-            $this->render('User/form', ['user' => $user, 'roles' => $dataRole]);
+            $this->render('Admin', 'User/form', ['user' => $user, 'roles' => $dataRole]);
         } else {
-            $this->render('Home/error', ['message' => $response->message]);
+            $this->render('Admin', 'Home/error', ['message' => $response->message]);
         }
     }
 
@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         $updateUserDTO = new UpdateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
         if (!$updateUserDTO->isValid()) {
-            $this->render('User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
             return;
         }
         $response = $this->_userService->updateUser($id, $updateUserDTO);
@@ -100,9 +100,9 @@ class UserController extends Controller
         $_SESSION['toastSuccess'] = $response->success;
 
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
-            $this->redirectToAction('user', 'edit', ['id' => $id]);
+            $this->redirectToAction('admin', 'user', 'edit', ['id' => $id]);
         }
     }
 }

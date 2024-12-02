@@ -25,7 +25,7 @@ class AuthLoginDTO
         }
 
         if (empty($this->password)) {
-            $this->errors['password'] = 'Tên không được bỏ trống.';
+            $this->errors['password'] = 'Mật khẩu không được bỏ trống.';
         } elseif (strlen($this->password) < 8) {
             $this->errors['password'] = 'Mật khẩu cần lớn hơn 8 ký tự.';
         }

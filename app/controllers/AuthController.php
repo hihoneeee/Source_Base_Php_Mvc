@@ -16,7 +16,7 @@ class AuthController extends Controller
     }
     public function ViewLogin()
     {
-        $this->renderForLogin('Admin/login');
+        $this->renderForLoginAdmin('Auth/login');
     }
 
 
@@ -24,16 +24,22 @@ class AuthController extends Controller
     {
         $LoginDto = new AuthLoginDTO($_POST['email'], $_POST['password']);
         if (!$LoginDto->isValid()) {
-            $this->renderForLogin('Auth/login', ['dto' => $LoginDto, 'errors' => $LoginDto->errors]);
+            $this->renderForLoginAdmin('Auth/login', ['dto' => $LoginDto, 'errors' => $LoginDto->errors]);
             return;
         }
         $response = $this->_authService->login($LoginDto);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('home', 'index');
+            setcookie('TestToken', $response->accessToken, [
+                'expires' => $response->expireTime,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => true,
+            ]);
+            $this->redirectToAction('admin', '', 'index');
         } else {
-            $this->redirectToAction('auth', 'login');
+            $this->redirectToAction('admin', 'auth', 'login');
         }
     }
 
@@ -42,6 +48,6 @@ class AuthController extends Controller
         $response = $this->_authService->Logout();
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
-        $this->redirectToAction('auth', 'login');
+        $this->redirectToAction('admin', 'auth', 'login');
     }
 }

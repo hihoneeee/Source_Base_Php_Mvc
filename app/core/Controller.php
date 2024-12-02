@@ -13,38 +13,49 @@ class Controller
     {
         $this->UrlAction = new UrlAction();
     }
-    protected function render($view, $data = [])
+    protected function render($area = null, $view, $data = [])
     {
         extract($data);
-        $UrlAction = $this->UrlAction;
 
-        // Start output buffering
+        // Điều chỉnh đường dẫn theo khu vực (Admin hoặc Public)
+        $viewPath = $area ? "./App/Views/{$area}/{$view}.php" : "./App/Views/{$view}.php";
+
+        if (!file_exists($viewPath)) {
+            throw new \Exception("View not found: {$viewPath}");
+        }
+
         ob_start();
-        require "./app/views/{$view}.php";
-        $content = ob_get_clean(); // Get the view content as $content
+        require $viewPath;
+        $content = ob_get_clean();
 
-        // Pass $content to layout.php
-        require "./app/views/layout.php";
+        require $area === 'Admin' ? "./App/Views/Admin/Layout.php" : "./App/Views/Public/Layout.php";
     }
 
-    protected function redirectToAction($controller, $action = 'index')
+
+
+    protected function redirectToAction($area, $controller = '', $action = 'index')
     {
-        $url = $action === 'index' ? "/$controller" : "/$controller/$action";
+        if ($area === 'public') {
+            $url = $action === 'index' ? "/$controller" : "/$controller/$action";
+        } elseif ($area === 'admin') {
+            $url = $action === 'index' ? $controller ? "/admin/$controller" : "/admin" : "admin/$controller/$action";
+        }
         header("Location: $url");
         exit;
     }
 
-    protected function renderForLogin($view, $data = [])
+
+    protected function renderForLoginAdmin($view, $data = [])
     {
         extract($data);
         $UrlAction = $this->UrlAction;
 
         // Start output buffering
         ob_start();
-        require "./app/views/{$view}.php";
+        require "./App/Views/Admin/{$view}.php";
         $this->contentForLogin = ob_get_clean(); // Get the view content
 
         // Sửa lại đường dẫn tới file layout
-        require "./app/views/AuthenticationLayout.php";
+        require "./App/Views/Admin/AuthenticationLayout.php";
     }
 }

@@ -5,8 +5,7 @@ use App\Helpers\UrlAction;
 <nav class="flex mb-4" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
         <li class="inline-flex items-center">
-            <a href="<?php echo UrlAction::action('home', 'index'); ?>"
-                class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 gap-2">
+            <a href="/admin" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 gap-2">
                 <i class="ri-home-4-fill"></i>
                 <span>Trang chủ</span>
             </a>
@@ -14,7 +13,7 @@ use App\Helpers\UrlAction;
         <li>
             <div class="flex items-center">
                 <i class="ri-arrow-right-s-line"></i>
-                <a href="<?php echo UrlAction::action('role', 'index'); ?>"
+                <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
                     class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 gap-2">
                     <span>Quản lý vai trò</span>
                 </a>
@@ -40,7 +39,7 @@ use App\Helpers\UrlAction;
         </h2>
     </div>
     <form
-        action="<?php echo isset($role) ? UrlAction::action('role', 'update', [$role->id]) : UrlAction::action('role', 'store'); ?>"
+        action="<?php echo isset($role) ? UrlAction::action('admin', 'role', 'update', [$role->id]) : UrlAction::action('admin', 'role', 'store'); ?>"
         method="post" class="p-4 space-y-4">
 
         <div>
@@ -51,7 +50,7 @@ use App\Helpers\UrlAction;
                 value="<?php echo htmlspecialchars($role->value ?? ''); ?>">
 
             <?php if (!empty($errors['value'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['value']); ?></p>
+            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['value']); ?></p>
             <?php endif; ?>
         </div>
 
@@ -60,7 +59,7 @@ use App\Helpers\UrlAction;
                 class="bg-<?php echo isset($role) ? 'green-600' : 'blue-500'; ?> text-white font-semibold px-4 py-2 rounded-lg hover:bg-<?php echo isset($role) ? 'green-700' : 'blue-600'; ?> focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <?php echo isset($role) ? 'Cập Nhật' : 'Thêm'; ?>
             </button>
-            <a href="<?php echo UrlAction::action('role', 'index'); ?>"
+            <a href="<?php echo UrlAction::action('admin','role', 'index'); ?>"
                 class="bg-gray-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300">Hủy</a>
         </div>
     </form>

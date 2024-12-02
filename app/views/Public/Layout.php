@@ -20,43 +20,22 @@
     <header>
         <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
             <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                <a href="<?php echo UrlAction::action('home', 'index'); ?>" class="flex items-center">
-                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">AdminLTE</span>
+                <a href="" class="flex items-center">
+                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Home</span>
                 </a>
-                <div class="flex items-center lg:order-2">
-                    <?php if (isset($_SESSION['user_info'])): ?>
-                    <span class="mr-2 text-gray-800 dark:text-white">
-                        Xin chào <?php echo htmlspecialchars($_SESSION['user_info']->last_name); ?>!
-                    </span>
-                    <a href="<?php echo UrlAction::action('auth', 'logout'); ?>"
-                        class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-                        Logout
-                    </a>
-                    <?php else: ?>
-                    <a href="<?php echo UrlAction::action('auth', 'login'); ?>"
-                        class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-                        Login
-                    </a>
-                    <?php endif; ?>
-                </div>
 
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                            <a href="<?php echo UrlAction::action('home', 'index'); ?>"
-                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
-                                aria-current="page">Trang chủ</a>
+                            <a href="" class=" block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent
+                                lg:text-primary-700 lg:p-0 dark:text-white" aria-current="page">Trang chủ</a>
                         </li>
                         <li>
-                            <a href="<?php echo UrlAction::action('user', 'index'); ?>"
+                            <a href=""
                                 class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
-                                aria-current="page">Người dùng</a>
+                                aria-current="page">Blogs</a>
                         </li>
-                        <li>
-                            <a href="<?php echo UrlAction::action('role', 'index'); ?>"
-                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
-                                aria-current="page">Vai trò</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -76,8 +55,7 @@
             <div class="md:flex md:justify-between">
                 <div class="mb-6 md:mb-0">
                     <a href="https://flowbite.com/" class="flex items-center">
-                        <span
-                            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">AdminLTE</span>
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Home</span>
                     </a>
                 </div>
 
@@ -140,31 +118,31 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    clifford: '#da373d',
-                },
-                backgroundColor: {
-                    "overlay-10": "rgba(0,0,0,0.1)",
-                    "overlay-20": "rgba(0,0,0,0.2)",
-                    "overlay-30": "rgba(0,0,0,0.3)",
-                    "overlay-50": "rgba(0,0,0,0.5)",
-                    "overlay-70": "rgba(0,0,0,0.7)",
-                },
-                fontSize: {
-                    xxs: ".5rem",
-                },
-                screens: {
-                    mobile: "640px", // Kích thước mobile
-                    tablet: "768px", // Kích thước tablet
-                    laptop: "1366px", // Kích thước laptop
-                    desktop: "1920px", // Kích thước màn hình 23.8 inch
-                },
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                    },
+                    backgroundColor: {
+                        "overlay-10": "rgba(0,0,0,0.1)",
+                        "overlay-20": "rgba(0,0,0,0.2)",
+                        "overlay-30": "rgba(0,0,0,0.3)",
+                        "overlay-50": "rgba(0,0,0,0.5)",
+                        "overlay-70": "rgba(0,0,0,0.7)",
+                    },
+                    fontSize: {
+                        xxs: ".5rem",
+                    },
+                    screens: {
+                        mobile: "640px", // Kích thước mobile
+                        tablet: "768px", // Kích thước tablet
+                        laptop: "1366px", // Kích thước laptop
+                        desktop: "1920px", // Kích thước màn hình 23.8 inch
+                    },
+                }
             }
         }
-    }
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -172,39 +150,39 @@
 
 
     <?php if (isset($_SESSION['toastMessage'])): ?>
-    <script>
-    window.onload = function() {
-        var toastMessage = "<?php echo $_SESSION['toastMessage']; ?>";
-        var toastSuccess = "<?php echo $_SESSION['toastSuccess'] ? 'true' : 'false'; ?>";
+        <script>
+            window.onload = function() {
+                var toastMessage = "<?php echo $_SESSION['toastMessage']; ?>";
+                var toastSuccess = "<?php echo $_SESSION['toastSuccess'] ? 'true' : 'false'; ?>";
 
-        // Cấu hình mặc định cho Toastr
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
+                // Cấu hình mặc định cho Toastr
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
 
-        // Gọi toastr để hiển thị thông báo
-        if (toastSuccess === 'true') {
-            toastr.success(toastMessage);
-        } else {
-            toastr.error(toastMessage);
-        }
-    };
-    </script>
-    <?php
+                // Gọi toastr để hiển thị thông báo
+                if (toastSuccess === 'true') {
+                    toastr.success(toastMessage);
+                } else {
+                    toastr.error(toastMessage);
+                }
+            };
+        </script>
+        <?php
         unset($_SESSION['toastMessage']);
         unset($_SESSION['toastSuccess']);
         ?>

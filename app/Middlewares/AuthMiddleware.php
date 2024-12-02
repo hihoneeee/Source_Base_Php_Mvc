@@ -2,33 +2,49 @@
 
 namespace App\Middlewares;
 
+use App\Helpers\JwtToken;
+
 class AuthMiddleware
 {
     public function handle()
     {
-        $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $currentPath = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+
         $excludedPaths = [
-            '/auth/login',
-            '/auth/verifyAccount',
+            'admin/auth/login',
+            'admin/auth/verifyAccount',
         ];
 
-        // First, check if the user is already logged in (has a token)
+        // Kiểm tra token trong cookie
         $isLoggedIn = isset($_COOKIE['TestToken']) && !empty($_COOKIE['TestToken']);
+        $userRole = null;
 
-        // If user is already logged in and tries to access login page, redirect to home
-        if ($isLoggedIn && $currentPath === '/auth/login') {
-            header("Location: /home");
-            exit();
+        if ($isLoggedIn) {
+            try {
+                // Giải mã JWT từ cookie
+                $decodedToken = JwtToken::decodeJWTToken($_COOKIE['TestToken']);
+                $userRole = $decodedToken->role ?? null;
+
+                // Nếu userRole là "user" và đang cố truy cập admin
+                if (strpos($currentPath, 'admin') === 0 && $userRole === 'user') {
+                    header("Location: /");
+                    exit();
+                }
+            } catch (\Exception $e) {
+                // Nếu token không hợp lệ hoặc lỗi giải mã
+                header("Location: /");
+                exit();
+            }
         }
 
-        // If path is excluded, allow access
+        // Định tuyến các URL ngoại lệ
         if (in_array($currentPath, $excludedPaths)) {
             return;
         }
 
-        // For all other paths, require authentication
-        if (!$isLoggedIn) {
-            header("Location: /auth/login");
+        // Nếu chưa đăng nhập và đang cố truy cập vào admin
+        if (!$isLoggedIn && strpos($currentPath, 'admin') === 0) {
+            header("Location: /admin/auth/login");
             exit();
         }
     }

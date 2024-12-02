@@ -5,6 +5,7 @@ namespace App\controllers;
 use App\core\Controller;
 use App\DTOs\Common\PaginationDTO;
 use App\DTOs\User\CreateUserDTO;
+use App\DTOs\User\UpdateUserDTO;
 use App\repositories\RoleRepository;
 use App\Services\UserService;
 
@@ -28,7 +29,7 @@ class UserController extends Controller
         $totalPages = ceil($response->total / $limit);
 
         $paginationDTO = new PaginationDTO($page, $totalPages, 'user');
-        $this->render('User/index', [
+        $this->render('Admin', 'User/index', [
             'users' => $response->data,
             'paginationDTO' => $paginationDTO,
             'name' => $name
@@ -89,12 +90,12 @@ class UserController extends Controller
 
     public function update($id)
     {
-        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
-        if (!$createUserDTO->isValid()) {
-            $this->render('User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
+        $updateUserDTO = new UpdateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
+        if (!$updateUserDTO->isValid()) {
+            $this->render('User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
             return;
         }
-        $response = $this->_userService->updateUser($id, $createUserDTO);
+        $response = $this->_userService->updateUser($id, $updateUserDTO);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
 

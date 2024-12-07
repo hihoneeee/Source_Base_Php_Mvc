@@ -13,7 +13,8 @@ class Category
 
     public function __construct($data = [])
     {
-        $this->title = $data['title'] ?? throw new \InvalidArgumentException("Title is required");
+
+        $this->title = $data['title'] ?? null;
         $this->avatar = $data['avatar'] ?? '';
         $this->description = $data['description'] ?? '';
         $this->created_at = date('Y-m-d H:i:s');

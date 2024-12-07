@@ -46,6 +46,7 @@ class AuthService
                 $existingEmail->last_name,
                 $existingEmail->email,
                 $existingEmail->role_id,
+                $existingEmail->avatar,
                 $expireTime
             );
             $response->accessToken = $accessToken;

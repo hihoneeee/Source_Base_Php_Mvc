@@ -18,7 +18,7 @@ class JwtToken
         $this->_roleRepo = $roleRepo;
     }
 
-    public function generateJWTToken(string $id, string $firstName, string $lastName, string $email, string $roleId, int $expire): string
+    public function generateJWTToken(string $id, string $firstName, string $lastName, string $email, string $roleId, string $avatar, int $expire): string
     {
         $role = $this->_roleRepo->getRoleById($roleId);
         if (!$role) {
@@ -31,6 +31,7 @@ class JwtToken
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
+            'avatar' => $avatar,
             'iat' => time(),
             'exp' => $expire
         ];
@@ -61,10 +62,32 @@ class JwtToken
                 'first_name' => $decoded->firstName,
                 'last_name' => $decoded->lastName,
                 'email' => $decoded->email,
+                'avatar' => $decoded->avatar,
             ];
         } catch (\Exception $e) {
             // Token không hợp lệ hoặc đã hết hạn
             return null;
         }
+    }
+
+    public static function updateJWTToken(string $token, array $updatedData): string
+    {
+        // Giải mã token để lấy payload
+        try {
+            $decoded = JWT::decode($token, new Key(JWT_SECRET, 'HS256'));
+            $payload = (array) $decoded; // Chuyển đổi sang mảng để dễ dàng chỉnh sửa
+        } catch (\Exception $e) {
+            throw new \Exception("Invalid token: " . $e->getMessage());
+        }
+
+        // Cập nhật các trường cần thay đổi
+        foreach ($updatedData as $key => $value) {
+            $payload[$key] = $value;
+        }
+
+        // Không thay đổi giá trị 'exp', giữ nguyên thời hạn cũ
+
+        // Tạo lại token mới
+        return JWT::encode($payload, JWT_SECRET, 'HS256');
     }
 }

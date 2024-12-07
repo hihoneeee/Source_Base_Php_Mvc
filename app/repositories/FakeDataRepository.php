@@ -61,7 +61,7 @@ class FakeDataRepository
             'email' => 'hohuy12344@gmail.com',
             'phone' => '0912345678',
             'password' => password_hash('12345678', PASSWORD_BCRYPT),
-            'avatar' => $this->faker->imageUrl(150, 150),
+            'avatar' => 'default-user.png',
             'role_id' => $adminRoleId
         ]);
 
@@ -72,7 +72,7 @@ class FakeDataRepository
                 'email' => $this->faker->email(),
                 'phone' => '09' . $this->faker->numberBetween(10000000, 99999999),
                 'password' => password_hash('12345678', PASSWORD_BCRYPT),
-                'avatar' => $this->faker->imageUrl(150, 150),
+                'avatar' => 'default-user.png',
                 'role_id' => $writerRoleId
             ]);
         }

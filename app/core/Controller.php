@@ -33,16 +33,29 @@ class Controller
 
 
 
-    protected function redirectToAction($area, $controller = '', $action = 'index')
+    protected function redirectToAction($area, $controller = '', $action = 'index', $id = null)
     {
+        // Base URL construction
         if ($area === 'public') {
-            $url = $action === 'index' ? "/$controller" : "/$controller/$action";
+            $url = $action === 'index'
+                ? "/$controller"
+                : "/$controller/$action";
         } elseif ($area === 'admin') {
-            $url = $action === 'index' ? $controller ? "/admin/$controller" : "/admin" : "admin/$controller/$action";
+            $url = $action === 'index'
+                ? ($controller ? "/admin/$controller" : "/admin")
+                : "/admin/$controller/$action";
         }
+
+        // Add ID to the URL if provided
+        if ($id !== null) {
+            $url .= "/$id";
+        }
+
+        // Redirect
         header("Location: $url");
         exit;
     }
+
 
 
     protected function renderForLoginAdmin($view, $data = [])

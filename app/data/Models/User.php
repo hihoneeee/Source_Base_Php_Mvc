@@ -18,9 +18,9 @@ class User
     public function __construct($data = [])
     {
         // Ensure required fields are set
-        $this->first_name = $data['first_name'] ?? throw new \InvalidArgumentException("First name is required");
-        $this->last_name = $data['last_name'] ?? throw new \InvalidArgumentException("Last name is required");
-        $this->email = $data['email'] ?? throw new \InvalidArgumentException("Email is required");
+        $this->first_name = $data['first_name'] ?? null;
+        $this->last_name = $data['last_name'] ?? null;
+        $this->email = $data['email'] ?? null;
         $this->phone = $data['phone'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->avatar = $data['avatar'] ?? '';

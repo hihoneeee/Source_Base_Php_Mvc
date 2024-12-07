@@ -6,6 +6,7 @@
   },
   "require": {
     "ircmaxell/password-compat": "^1.0",
-    "firebase/php-jwt": "^6.10"
+    "firebase/php-jwt": "^6.10",
+    "fakerphp/faker": "^1.24"
   }
 }

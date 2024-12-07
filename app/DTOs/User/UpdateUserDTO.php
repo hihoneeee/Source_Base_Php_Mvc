@@ -24,7 +24,7 @@ class UpdateUserDTO
 
         if (empty($this->first_name)) {
             $this->errors['first_name'] = 'Họ đệm không được bỏ trống.';
-        } elseif (strlen($this->first_name) > 20) {
+        } elseif (strlen($this->first_name) > 50) {
             $this->errors['first_name'] = 'Họ đệm cần bé hơn 20 ký tự!';
         }
 

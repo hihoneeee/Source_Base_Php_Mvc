@@ -39,16 +39,25 @@ $userService = new Services\UserService($userRepository, $mapper);
 $roleRepository = new Repositories\RoleRepository($db);
 $roleService = new Services\RoleService($roleRepository, $mapper);
 
+$fakeDataRepository = new Repositories\FakeDataRepository($db);
+$fakeDataService = new Services\FakeDataService($fakeDataRepository);
+
+$categoryRepository = new Repositories\CategoryRepository($db);
+$categoryService = new Services\CategoryService($categoryRepository, $mapper);
+
 // Khởi tạo hepler
 $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 
-$authService = new Services\AuthService($userRepository, $jwtToken, $roleRepository);
+$authService = new Services\AuthService($userRepository, $jwtToken);
 
 // Khởi tạo Controller với Service tương ứng
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
+$categoryController = new Controllers\CategoryController($categoryService);
+
 $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
+$fakeDataController = new Controllers\FakeDataController($fakeDataService);
 
 $publicController = new Controllers\PublicController();
 
@@ -63,8 +72,11 @@ $authMiddleware->handle();
 $router = new Core\Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
+    'CategoryController' => $categoryController,
+
     'AdminController' => $adminController,
     'AuthController' => $authController,
+    'FakeDataController' => $fakeDataController,
 
     'PublicController' => $publicController
 ]);
@@ -73,7 +85,10 @@ $router = new Core\Router([
 RouterAdmin\AdminRouter::register($router);
 RouterAdmin\UserRouter::register($router);
 RouterAdmin\RoleRouter::register($router);
+RouterAdmin\CategoryRouter::register($router);
+
 RouterAdmin\AuthRouter::register($router);
+RouterAdmin\FakerDataRouter::register($router);
 
 RouterPublic\PublicRouter::register($router);
 

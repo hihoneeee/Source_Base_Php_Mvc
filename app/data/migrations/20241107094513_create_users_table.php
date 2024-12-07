@@ -1,12 +1,15 @@
 <?php
-class CreateUsersTable {
+class CreateUsersTable
+{
     private $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function up() {
+    public function up()
+    {
         $sql = "CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(255) NOT NULL,
@@ -18,7 +21,7 @@ class CreateUsersTable {
             role_id INT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
+            CONSTRAINT user_fk_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
         ) ENGINE=INNODB";
 
         if ($this->db->query($sql)) {
@@ -28,7 +31,8 @@ class CreateUsersTable {
         }
     }
 
-    public function down() {
+    public function down()
+    {
         $sql = "DROP TABLE IF EXISTS users";
 
         if ($this->db->query($sql)) {

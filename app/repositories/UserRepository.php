@@ -86,16 +86,25 @@ class UserRepository
     }
     public function updateUser($id, User $user)
     {
-        $query = "UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email, role_id = :role_id, updated_at = :updated_at WHERE id = :id";
+        $query = "UPDATE users 
+                  SET first_name = :first_name, 
+                      last_name = :last_name, 
+                      email = :email, 
+                      role_id = :role_id, 
+                      avatar = :avatar, 
+                      updated_at = :updated_at 
+                  WHERE id = :id";
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':first_name', $user->first_name);
         $stmt->bindParam(':last_name', $user->last_name);
         $stmt->bindParam(':email', $user->email);
         $stmt->bindParam(':role_id', $user->role_id);
+        $stmt->bindParam(':avatar', $user->avatar);
         $stmt->bindParam(':updated_at', $user->updated_at);
         return $stmt->execute();
     }
+
     public function getUserByEmail($email)
     {
         $query = "SELECT * FROM users WHERE email = :email";

@@ -2,16 +2,21 @@
 
 namespace App\Data\Models;
 
-class Role
+class Category
 {
     public $id;
-    public $value;
+    public $title;
+    public $avatar;
+    public $description;
     public $created_at;
     public $updated_at;
 
     public function __construct($data = [])
     {
-        $this->value = $data['value'] ?? null;
+
+        $this->title = $data['title'] ?? null;
+        $this->avatar = $data['avatar'] ?? '';
+        $this->description = $data['description'] ?? '';
         $this->created_at = date('Y-m-d H:i:s');
         $this->updated_at = date('Y-m-d H:i:s');
     }

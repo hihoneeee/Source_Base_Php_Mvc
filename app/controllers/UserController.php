@@ -5,7 +5,9 @@ namespace App\controllers;
 use App\core\Controller;
 use App\DTOs\Common\PaginationDTO;
 use App\DTOs\User\CreateUserDTO;
+use App\DTOs\User\UpdateProfileUserDTO;
 use App\DTOs\User\UpdateUserDTO;
+use App\Helpers\JwtToken;
 use App\repositories\RoleRepository;
 use App\Services\UserService;
 
@@ -42,36 +44,36 @@ class UserController extends Controller
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
-            $this->redirectToAction('home', '404');
+            $this->redirectToAction('admin', 'home', '404');
         }
     }
 
     public function show($id)
     {
         $user = $this->_userService->getUserById($id);
-        $this->render('User/show', ['user' => $user]);
+        $this->render('Admin', 'User/show', ['user' => $user]);
     }
 
     public function create()
     {
         $dataRole = $this->_roleRepo->getListRole();
-        $this->render('User/form', ['roles' => $dataRole]);
+        $this->render('Admin', 'User/form', ['roles' => $dataRole]);
     }
 
     public function store()
     {
         $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
         if (!$createUserDTO->isValid()) {
-            $this->render('User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
             return;
         }
         $response = $this->_userService->createUser($createUserDTO);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
             $this->redirectToAction('user', 'create');
         }
@@ -82,9 +84,9 @@ class UserController extends Controller
         if ($response->success) {
             $dataRole = $this->_roleRepo->getListRole();
             $user = $response->data;
-            $this->render('User/form', ['user' => $user, 'roles' => $dataRole]);
+            $this->render('Admin', 'User/form', ['user' => $user, 'roles' => $dataRole]);
         } else {
-            $this->render('Home/error', ['message' => $response->message]);
+            $this->render('Admin', 'Home/error', ['message' => $response->message]);
         }
     }
 
@@ -92,7 +94,7 @@ class UserController extends Controller
     {
         $updateUserDTO = new UpdateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
         if (!$updateUserDTO->isValid()) {
-            $this->render('User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
             return;
         }
         $response = $this->_userService->updateUser($id, $updateUserDTO);
@@ -100,9 +102,62 @@ class UserController extends Controller
         $_SESSION['toastSuccess'] = $response->success;
 
         if ($response->success) {
-            $this->redirectToAction('user', 'index');
+            $this->redirectToAction('admin', 'user', 'index');
         } else {
-            $this->redirectToAction('user', 'edit', ['id' => $id]);
+            $this->redirectToAction('admin', 'user', 'edit', $id);
+        }
+    }
+
+    public function profileUserSystem($id)
+    {
+        $response = $this->_userService->getUserById($id);
+        if ($response->data->id != $_SESSION['user_info']->id) {
+            $response->message = 'Người dùng không hợp lệ!';
+            $response->success = false;
+            $_SESSION['toastMessage'] = $response->message;
+            $_SESSION['toastSuccess'] = $response->success;
+            $this->redirectToAction('admin', '', 'index');
+        }
+        if ($response->success) {
+            $this->render('Admin', 'User/profile', ['user' => $response->data]);
+        }
+    }
+
+    public function updateProfileUserSystem($id)
+    {
+        $updateUserDTO = new UpdateProfileUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['phone'], $_FILES['avatar']);
+        if (!$updateUserDTO->isValid()) {
+            $this->render('Admin', 'User/profile', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
+            return;
+        }
+        $response = $this->_userService->updateProfileUserSystem($id, $updateUserDTO);
+        $_SESSION['toastMessage'] = $response->message;
+        $_SESSION['toastSuccess'] = $response->success;
+
+        if ($response->success) {
+            $currentToken = $_COOKIE['TestToken'] ?? null;
+
+            if ($currentToken) {
+                try {
+                    $updatedData = [
+                        'firstName' => $response->data->first_name,
+                        'lastName' => $response->data->last_name,
+                        'email' => $response->data->email,
+                        'phone' => $response->data->phone,
+                        'avatar' => $response->data->avatar,
+                    ];
+                    $newToken = JwtToken::updateJWTToken($currentToken, $updatedData);
+                    $decoded = JwtToken::decodeJWTToken($newToken);
+                    $expireTime = $decoded->exp ?? time() + 3600;
+                    setcookie('TestToken', $newToken, $expireTime, '/');
+                } catch (\Exception $e) {
+                    error_log("Failed to update token: " . $e->getMessage());
+                }
+            }
+
+            $this->redirectToAction('admin', 'user', 'profile', $id);
+        } else {
+            $this->redirectToAction('admin', 'user', 'profile', $id);
         }
     }
 }

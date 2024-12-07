@@ -36,5 +36,13 @@ class UserRouter
             'controller' => 'UserController',
             'action' => 'detail',
         ]);
+        $router->add('admin/user/profile/{id}', [
+            'controller' => 'UserController',
+            'action' => 'profileUserSystem',
+        ]);
+        $router->add('admin/user/update-profile/{id}', [
+            'controller' => 'UserController',
+            'action' => 'updateProfileUserSystem',
+        ]);
     }
 }

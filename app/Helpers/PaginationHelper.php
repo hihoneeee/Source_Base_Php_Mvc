@@ -9,7 +9,10 @@ class PaginationHelper
     public static function render(PaginationDTO $paginationDTO)
     {
         $currentPage = $paginationDTO->getCurrentPage();
-        $totalPages = $paginationDTO->getTotalPages();
+        $totalPages = $paginationDTO->getTotalPages();  
+
+        // Kiểm tra xem đường dẫn hiện tại có nằm trong khu vực admin hay không
+        $isInAdminArea = strpos(trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'), 'admin') === 0;
 
         if ($totalPages > 1) {
             echo '<nav aria-label="Page navigation example" class="flex justify-center">';
@@ -17,7 +20,7 @@ class PaginationHelper
 
             // Previous button
             echo '<li>';
-            echo '<a href="' . $paginationDTO->generateUrl(1) . '" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
+            echo '<a href="' . ($isInAdminArea ? '/admin' : '') . $paginationDTO->generateUrl(max(1, $currentPage - 1)) . '" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
             echo '<i class="ri-arrow-left-s-line"></i>';
             echo '</a>';
             echo '</li>';
@@ -29,7 +32,7 @@ class PaginationHelper
                     : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white';
 
                 echo '<li>';
-                echo '<a href="' . $paginationDTO->generateUrl($i) . '" class="flex items-center justify-center px-3 h-8 leading-tight ' . $isActive . '">';
+                echo '<a href="' . ($isInAdminArea ? '/admin' : '') . $paginationDTO->generateUrl($i) . '" class="flex items-center justify-center px-3 h-8 leading-tight ' . $isActive . '">';
                 echo $i;
                 echo '</a>';
                 echo '</li>';
@@ -37,7 +40,7 @@ class PaginationHelper
 
             // Next button
             echo '<li>';
-            echo '<a href="' . $paginationDTO->generateUrl($totalPages) . '" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
+            echo '<a href="' . ($isInAdminArea ? '/admin' : '') . $paginationDTO->generateUrl(min($totalPages, $currentPage + 1)) . '" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">';
             echo '<i class="ri-arrow-right-s-line"></i>';
             echo '</a>';
             echo '</li>';

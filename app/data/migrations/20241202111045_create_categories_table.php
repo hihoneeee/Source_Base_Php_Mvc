@@ -1,5 +1,6 @@
 <?php
-class CreateRolesTable
+
+class CreateCategoriesTable
 {
     private $db;
 
@@ -10,28 +11,30 @@ class CreateRolesTable
 
     public function up()
     {
-        $sql = "CREATE TABLE roles (
+        $sql = "CREATE TABLE categories (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            value VARCHAR(255) NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            avatar VARCHAR(255),
+            description TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=INNODB";
 
         if ($this->db->query($sql)) {
-            echo "Table 'roles' created successfully.\n";
+            echo "Table 'categories' created successfully.\n";
         } else {
-            echo "Error creating table 'roles': " . $this->db->error . "\n";
+            echo "Error creating table 'categories': " . $this->db->error . "\n";
         }
     }
 
     public function down()
     {
-        $sql = "DROP TABLE IF EXISTS roles";
+        $sql = "DROP TABLE IF EXISTS categories";
 
         if ($this->db->query($sql)) {
-            echo "Table 'roles' dropped successfully.\n";
+            echo "Table 'categories' dropped successfully.\n";
         } else {
-            echo "Error dropping table 'roles': " . $this->db->error . "\n";
+            echo "Error dropping table 'categories': " . $this->db->error . "\n";
         }
     }
 }

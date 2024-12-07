@@ -8,6 +8,10 @@ class AuthMiddleware
 {
     public function handle()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $currentPath = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
         $excludedPaths = [
@@ -15,37 +19,40 @@ class AuthMiddleware
             'admin/auth/verifyAccount',
         ];
 
-        // Kiểm tra token trong cookie
         $isLoggedIn = isset($_COOKIE['TestToken']) && !empty($_COOKIE['TestToken']);
         $userRole = null;
 
         if ($isLoggedIn) {
             try {
-                // Giải mã JWT từ cookie
                 $decodedToken = JwtToken::decodeJWTToken($_COOKIE['TestToken']);
-                $userRole = $decodedToken->role ?? null;
+                $userRole = strtolower($decodedToken->role ?? '');
 
-                // Nếu userRole là "user" và đang cố truy cập admin
-                if (strpos($currentPath, 'admin') === 0 && $userRole === 'user') {
-                    header("Location: /");
+                // Ngăn truy cập vào trang login nếu đã đăng nhập
+                if ($currentPath === 'admin/auth/login' && $userRole === 'admin') {
+                    header("Location: /admin");
                     exit();
                 }
+
+                // Ngăn role "user" truy cập vào admin
+                if (strpos($currentPath, 'admin') === 0 && $userRole == 'user') {
+                    $_SESSION['toastMessage'] = 'Bạn không có quyền truy cập!';
+                    $this->redirectUnauthorized();
+                }
             } catch (\Exception $e) {
-                // Nếu token không hợp lệ hoặc lỗi giải mã
-                header("Location: /");
+                $_SESSION['toastMessage'] = 'Token không hợp lệ!';
+                $this->redirectUnauthorized();
+            }
+        } else {
+            if (strpos($currentPath, 'admin') === 0 && !in_array($currentPath, $excludedPaths)) {
+                header("Location: /admin/auth/login");
                 exit();
             }
         }
+    }
 
-        // Định tuyến các URL ngoại lệ
-        if (in_array($currentPath, $excludedPaths)) {
-            return;
-        }
-
-        // Nếu chưa đăng nhập và đang cố truy cập vào admin
-        if (!$isLoggedIn && strpos($currentPath, 'admin') === 0) {
-            header("Location: /admin/auth/login");
-            exit();
-        }
+    private function redirectUnauthorized()
+    {
+        header("Location: /");
+        exit();
     }
 }

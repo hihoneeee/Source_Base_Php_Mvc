@@ -66,42 +66,72 @@
         </nav>
 
         <aside
-            class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+            class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 bg-[#1a2226] border-r border-gray-700 dark:bg-gray-800 dark:border-gray-700"
             aria-label="Sidenav" id="drawer-navigation">
-            <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
+            <div class="overflow-y-auto py-5 px-3 h-full text-[#4b646f]">
 
+                <div
+                    class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
+                    Main Menu
+                </div>
                 <ul class="space-y-2">
-
                     <li>
-
                         <a href="/admin"
-                            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                            <span class="ml-3"> <i class="ri-home-3-line mr-2"></i>Trang chủ</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'user', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                            <span class="ml-3"><i class="ri-group-line mr-2"></i>Quản lý người dùng</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                            <span class="ml-3"><i class="ri-user-settings-line mr-2"></i>Quản lý vai trò</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'category', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                            <span class="ml-3"><i class="ri-contacts-book-line mr-2"></i>Quản lý danh mục</span>
+                            class="flex items-center justify-between p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                            <div class="flex items-center">
+                                <i class="ri-home-3-line mr-3"></i>
+                                <span>Trang chủ</span>
+                            </div>
                         </a>
                     </li>
                 </ul>
 
-            </div>
+                <div
+                    class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
+                    System Menu
+                </div>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="<?php echo UrlAction::action('admin', 'user', 'index'); ?>"
+                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                            <i class="ri-group-line mr-2 text-lg"></i>
+                            <span>Quản lý người dùng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
+                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                            <i class="ri-user-settings-line mr-2 text-lg"></i>
+                            <span>Quản lý vai trò</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo UrlAction::action('admin', 'category', 'index'); ?>"
+                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                            <i class="ri-contacts-book-line mr-2 text-lg"></i>
+                            <span>Quản lý danh mục</span>
+                        </a>
+                    </li>
+                </ul>
 
+                <div
+                    class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
+                    Client Menu
+                </div>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="<?php echo UrlAction::action('admin', 'post', 'index'); ?>"
+                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                            <i class="ri-pages-line mr-2 text-lg"></i>
+                            <span>Quản lý bài viết</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </aside>
+
+
+
         <main class="p-4 md:ml-64 pt-20 min-h-screen">
             <?php echo $content; ?>
 

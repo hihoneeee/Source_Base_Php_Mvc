@@ -43,7 +43,7 @@ class CategoryController extends Controller
     {
         $createCategoryDTO = new Category\FormCategoryDTO($_POST['title'], $_POST['description'], $_FILES['avatar']);
         if (!$createCategoryDTO->isValid()) {
-            $this->render('Admin', 'Category/form', ['dto' => $createCategoryDTO, 'errors' => $createCategoryDTO->errors]);
+            $this->render('Admin', 'Category/form', ['errors' => $createCategoryDTO->errors]);
             return;
         }
         $response = $this->_categoryService->createCategory($createCategoryDTO);
@@ -67,7 +67,7 @@ class CategoryController extends Controller
     {
         $createCategoryDTO = new Category\FormCategoryDTO($_POST['title'], $_POST['description'], $_FILES['avatar']);
         if (!$createCategoryDTO->isValid(true)) {
-            $this->render('Admin', 'Category/form', ['dto' => $createCategoryDTO, 'errors' => $createCategoryDTO->errors]);
+            $this->render('Admin', 'Category/form', ['errors' => $createCategoryDTO->errors]);
             return;
         }
 
@@ -79,7 +79,7 @@ class CategoryController extends Controller
         if ($response->success) {
             $this->redirectToAction('admin', 'category', 'index');
         } else {
-            $this->redirectToAction('admin', 'category', 'edit', ['id' => $id]);
+            $this->redirectToAction('admin', 'category', 'edit', $id);
         }
     }
 

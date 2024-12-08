@@ -45,6 +45,12 @@ $fakeDataService = new Services\FakeDataService($fakeDataRepository);
 $categoryRepository = new Repositories\CategoryRepository($db);
 $categoryService = new Services\CategoryService($categoryRepository, $mapper);
 
+$postDetailRepository = new Repositories\PostDetailRepository($db);
+$postDetailService = new Services\PostDetailService($postDetailRepository, $mapper);
+
+$postRepository = new Repositories\PostRepository($db);
+$postService = new Services\PostService($postRepository, $mapper, $categoryRepository, $postDetailService);
+
 // Khởi tạo hepler
 $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 
@@ -54,6 +60,7 @@ $authService = new Services\AuthService($userRepository, $jwtToken);
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
 $categoryController = new Controllers\CategoryController($categoryService);
+$postController = new Controllers\PostController($postService, $categoryRepository, $userRepository);
 
 $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
@@ -73,6 +80,7 @@ $router = new Core\Router([
     'UserController' => $userController,
     'RoleController' => $roleController,
     'CategoryController' => $categoryController,
+    'PostController' => $postController,
 
     'AdminController' => $adminController,
     'AuthController' => $authController,
@@ -86,6 +94,7 @@ RouterAdmin\AdminRouter::register($router);
 RouterAdmin\UserRouter::register($router);
 RouterAdmin\RoleRouter::register($router);
 RouterAdmin\CategoryRouter::register($router);
+RouterAdmin\PostRouter::register($router);
 
 RouterAdmin\AuthRouter::register($router);
 RouterAdmin\FakerDataRouter::register($router);

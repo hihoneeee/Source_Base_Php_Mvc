@@ -1,21 +1,21 @@
 <?php
 
-namespace App\DTOs\Category;
+namespace App\DTOs\Post;
 
-class FormCategoryDTO
+class FormPostDetailDTO
 {
     public $title;
-    public $description;
+    public $meta;
+    public $content;
     public $avatar;
-    public $updated_at;
     public $errors = [];
 
-    public function __construct($title, $description, $avatar)
+    public function __construct($title, $meta, $content, $avatar)
     {
         $this->title = $title;
-        $this->description = $description;
+        $this->meta = $meta;
+        $this->content = $content;
         $this->avatar = $avatar;
-        $this->updated_at = date('Y-m-d H:i:s');
     }
 
     public function isValid($isUpdate = false)
@@ -23,18 +23,23 @@ class FormCategoryDTO
         $this->errors = [];
 
         if (empty($this->title)) {
-            $this->errors['title'] = 'Tên danh mục không được bỏ trống';
+            $this->errors['title'] = 'Tiêu đề không được bỏ trống';
         } elseif (strlen($this->title) < 5) {
-            $this->errors['title'] = 'Tên danh mục phải có ít nhất 3 ký tự!';
+            $this->errors['title'] = 'Tiêu đề phải có ít nhất 3 ký tự!';
         }
 
-        if (empty($this->description)) {
-            $this->errors['description'] = 'Mô tả danh mục không được bỏ trống';
-        } elseif (strlen($this->description) < 5) {
-            $this->errors['description'] = 'Mô tả danh mục phải có ít nhất 3 ký tự!';
+        if (empty($this->meta)) {
+            $this->errors['meta'] = 'Mô tả không được bỏ trống';
+        } elseif (strlen($this->meta) < 150) {
+            $this->errors['meta'] = 'Mô tả phải có ít nhất 150 ký tự!';
+        } elseif (strlen($this->meta) > 160) {
+            $this->errors['meta'] = 'Mô tả không được quá 160 ký tự!';
         }
 
-        // Kiểm tra avatar (file phải là hình ảnh và không được vượt quá 2MB)
+        if (empty($this->content)) {
+            $this->errors['content'] = 'Nội dung không được bỏ trống';
+        }
+
         if (!$isUpdate || ($this->avatar && $this->avatar['error'] === UPLOAD_ERR_OK)) {
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
             $fileName = $this->avatar['name'];
@@ -48,7 +53,6 @@ class FormCategoryDTO
                 $this->errors['avatar'] = 'Avatar không được vượt quá 2MB!';
             }
         }
-
 
         return empty($this->errors);
     }

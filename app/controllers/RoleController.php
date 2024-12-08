@@ -46,7 +46,7 @@ class RoleController extends Controller
     {
         $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
         if (!$createRoleDTO->isValid()) {
-            $this->render('Admin', 'Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
+            $this->render('Admin', 'Role/form', ['errors' => $createRoleDTO->errors]);
             return;
         }
         $response = $this->_roleService->createRole($createRoleDTO);
@@ -75,7 +75,7 @@ class RoleController extends Controller
         $createRoleDTO = new Role\CreateRoleDTO($_POST['value']);
 
         if (!$createRoleDTO->isValid()) {
-            $this->render('Admin', 'Role/form', ['dto' => $createRoleDTO, 'errors' => $createRoleDTO->errors]);
+            $this->render('Admin', 'Role/form', ['errors' => $createRoleDTO->errors]);
             return;
         }
 
@@ -86,7 +86,7 @@ class RoleController extends Controller
         if ($response->success) {
             $this->redirectToAction('admin', 'role', 'index');
         } else {
-            $this->redirectToAction('admin', 'role', 'edit', ['id' => $id]);
+            $this->redirectToAction('admin', 'role', 'edit', $id);
         }
     }
 

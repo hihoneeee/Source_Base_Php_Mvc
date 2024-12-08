@@ -2,12 +2,12 @@
 
 namespace App\Data\Models;
 
-class Post
+class Comment
 {
     public $id;
-    public $content;
     public $user_id;
     public $postDetail_id;
+    public $content;
     public $created_at;
     public $updated_at;
 

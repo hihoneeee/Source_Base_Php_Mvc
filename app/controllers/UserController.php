@@ -66,7 +66,7 @@ class UserController extends Controller
     {
         $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $_POST['role_id']);
         if (!$createUserDTO->isValid()) {
-            $this->render('Admin', 'User/form', ['dto' => $createUserDTO, 'errors' => $createUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['errors' => $createUserDTO->errors]);
             return;
         }
         $response = $this->_userService->createUser($createUserDTO);
@@ -94,7 +94,7 @@ class UserController extends Controller
     {
         $updateUserDTO = new UpdateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id']);
         if (!$updateUserDTO->isValid()) {
-            $this->render('Admin', 'User/form', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
+            $this->render('Admin', 'User/form', ['errors' => $updateUserDTO->errors]);
             return;
         }
         $response = $this->_userService->updateUser($id, $updateUserDTO);
@@ -127,7 +127,7 @@ class UserController extends Controller
     {
         $updateUserDTO = new UpdateProfileUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['phone'], $_FILES['avatar']);
         if (!$updateUserDTO->isValid()) {
-            $this->render('Admin', 'User/profile', ['dto' => $updateUserDTO, 'errors' => $updateUserDTO->errors]);
+            $this->render('Admin', 'User/profile', ['errors' => $updateUserDTO->errors]);
             return;
         }
         $response = $this->_userService->updateProfileUserSystem($id, $updateUserDTO);

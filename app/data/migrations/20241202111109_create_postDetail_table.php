@@ -13,12 +13,11 @@ class CreatePostDetailTable
     {
         $sql = "CREATE TABLE postDetail (
             id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            meta VARCHAR(255) NOT NULL,
             content TEXT NOT NULL,
             post_id INT NOT NULL,
             avatar VARCHAR(255),
-            status ENUM('pending', 'completed', 'hidden') DEFAULT 'pending',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             CONSTRAINT postDetail_fk_post FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
         ) ENGINE=INNODB";
 

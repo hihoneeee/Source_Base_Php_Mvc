@@ -25,7 +25,7 @@ class HandleFileUpload
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
             $newFileName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '-', $baseName)) . rand(1000, 9999) . '.' . $extension;
 
-            $uploadDir = __DIR__ . "/../../App/Uploads/$folderName/";
+            $uploadDir = __DIR__ . "/../../App/Public/Uploads/$folderName/";
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
@@ -46,7 +46,7 @@ class HandleFileUpload
     public static function deleteFile(string $fileName, string $folderName)
     {
         try {
-            $filePath = __DIR__ . "/../../App/Uploads/$folderName/" . $fileName;
+            $filePath = __DIR__ . "/../../App/Public/Uploads/$folderName/" . $fileName;
 
             if (!file_exists($filePath)) {
                 throw new Exception("File không tồn tại: $fileName");

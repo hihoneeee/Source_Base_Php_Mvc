@@ -16,8 +16,10 @@ class PostDetailRepository
 
     public function createPostDetail(PostDetail $postDetail)
     {
-        $query = "INSERT INTO postdetail (title, meta, content, post_id, avatar, status) VALUES (:title, :meta, :content, :post_id, :avatar, :status)";
+        $query = "INSERT INTO postdetail (title, meta, content, post_id, avatar) VALUES (:title, :meta, :content, :post_id, :avatar)";
         $stmt = $this->_db->prepare($query);
+        $stmt->bindParam(':title', $postDetail->title);
+        $stmt->bindParam(':meta', $postDetail->meta);
         $stmt->bindParam(':content', $postDetail->content);
         $stmt->bindParam(':post_id', $postDetail->post_id);
         $stmt->bindParam(':avatar', $postDetail->avatar);
@@ -39,14 +41,13 @@ class PostDetailRepository
 
     public function updatePostDetail($id, PostDetail $postDetail)
     {
-        $query = "UPDATE postdetail SET title = :title, meta = :meta, content = :content, avatar = :avatar, updated_at = :updated_at WHERE id = :id";
+        $query = "UPDATE postdetail SET title = :title, meta = :meta, content = :content, avatar = :avatar WHERE id = :id";
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':title', $postDetail->title);
         $stmt->bindParam(':meta', $postDetail->meta);
         $stmt->bindParam(':content', $postDetail->content);
         $stmt->bindParam(':avatar', $postDetail->avatar);
-        $stmt->bindParam(':updated_at', $postDetail->updated_at);
         return $stmt->execute();
     }
 

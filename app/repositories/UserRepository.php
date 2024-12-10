@@ -68,6 +68,12 @@ class UserRepository
 
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function getUserByPostId($postId)
+    {
+
+    }
+
     public function createUser(User $user)
     {
         $query = "INSERT INTO users (first_name, last_name, email, password, role_id)

@@ -65,7 +65,6 @@ class JwtToken
                 'avatar' => $decoded->avatar,
             ];
         } catch (\Exception $e) {
-            // Token không hợp lệ hoặc đã hết hạn
             return null;
         }
     }

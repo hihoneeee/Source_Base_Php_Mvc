@@ -38,6 +38,29 @@ class CategoryService
         return $response;
     }
 
+    public function getCategoryDetailsById($id, $limit, $page)
+    {
+        $response = new ServiceResponse();
+        try {
+            $data = $this->_categoryRepo->getCategoryDetailsById($id, $limit, $page);
+            if ($data == null) {
+                ServiceResponseExtensions::setNotFound($response, "Danh mục");
+                return $response;
+            }
+            $categoryDTO = new CategoryDTO\GetCategoryDTO();
+            $getCategoryDTO = $this->_mapper->map($data['category'], $categoryDTO);
+            $getCategoryDTO->dataPost = $data['posts'];
+            $response->data = $getCategoryDTO;
+            $response->total = $data['total'];
+            $response->limit = $limit;
+            $response->page = $page;
+            ServiceResponseExtensions::setSuccess($response, "Lấy danh sách danh mục thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
+
     public function getCategoryById($id)
     {
         $response = new ServiceResponse();

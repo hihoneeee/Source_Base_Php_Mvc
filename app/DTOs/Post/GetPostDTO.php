@@ -9,4 +9,6 @@ class GetPostDTO
     public $status;
     public $updated_at;
     public $dataDetail = [];
+    public $dataUser = [];
+    public $dataCategory = [];
 }

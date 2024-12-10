@@ -14,9 +14,21 @@ class AuthMiddleware
 
         $currentPath = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
-        $excludedPaths = [
+        // Các đường dẫn không yêu cầu đăng nhập
+        $excludedAdminPaths = [
             'admin/auth/login',
             'admin/auth/verifyAccount',
+        ];
+
+        // Các đường dẫn chỉ dành cho public
+        $publicPaths = [
+            'dang-nhap',
+            'dang-ky',
+        ];
+
+        // Các đường dẫn yêu cầu đã đăng nhập
+        $authRequiredPaths = [
+            'dang-xuat',
         ];
 
         $isLoggedIn = isset($_COOKIE['TestToken']) && !empty($_COOKIE['TestToken']);
@@ -27,23 +39,38 @@ class AuthMiddleware
                 $decodedToken = JwtToken::decodeJWTToken($_COOKIE['TestToken']);
                 $userRole = strtolower($decodedToken->role ?? '');
 
-                // Ngăn truy cập vào trang login nếu đã đăng nhập
-                if ($currentPath === 'admin/auth/login' && $userRole === 'admin') {
-                    header("Location: /admin");
+                // Ngăn truy cập vào các route dành cho public khi đã đăng nhập
+                if (in_array($currentPath, $publicPaths)) {
+                    $_SESSION['toastMessage'] = 'Bạn đã đăng nhập!';
+                    header("Location: /");
                     exit();
                 }
 
                 // Ngăn role "user" truy cập vào admin
-                if (strpos($currentPath, 'admin') === 0 && $userRole == 'user') {
+                if (strpos($currentPath, 'admin') === 0 && $userRole === 'user') {
                     $_SESSION['toastMessage'] = 'Bạn không có quyền truy cập!';
                     $this->redirectUnauthorized();
+                }
+
+                // Ngăn admin vào trang login khi đã đăng nhập
+                if ($currentPath === 'admin/auth/login' && $userRole === 'admin') {
+                    header("Location: /admin");
+                    exit();
                 }
             } catch (\Exception $e) {
                 $_SESSION['toastMessage'] = 'Token không hợp lệ!';
                 $this->redirectUnauthorized();
             }
         } else {
-            if (strpos($currentPath, 'admin') === 0 && !in_array($currentPath, $excludedPaths)) {
+            // Ngăn người dùng chưa đăng nhập truy cập vào các route yêu cầu xác thực
+            if (in_array($currentPath, $authRequiredPaths)) {
+                $_SESSION['toastMessage'] = 'Bạn cần đăng nhập để thực hiện thao tác này!';
+                header("Location: /dang-nhap");
+                exit();
+            }
+
+            // Ngăn người dùng chưa đăng nhập vào trang admin
+            if (strpos($currentPath, 'admin') === 0 && !in_array($currentPath, $excludedAdminPaths)) {
                 header("Location: /admin/auth/login");
                 exit();
             }

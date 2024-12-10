@@ -35,18 +35,21 @@ class Controller
 
     protected function redirectToAction($area, $controller = '', $action = 'index', $id = null)
     {
-        // Base URL construction
+        // Lấy base URL từ server
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        $baseUrl = $protocol . "://" . $_SERVER['HTTP_HOST'];
+
+        // Xây dựng URL tuyệt đối
         if ($area === 'public') {
             $url = $action === 'index'
-                ? "/$controller"
-                : "/$controller/$action";
+                ? "$baseUrl/$controller"
+                : "$baseUrl/$controller/$action";
         } elseif ($area === 'admin') {
             $url = $action === 'index'
-                ? ($controller ? "/admin/$controller" : "/admin")
-                : "/admin/$controller/$action";
+                ? ($controller ? "$baseUrl/admin/$controller" : "$baseUrl/admin")
+                : "$baseUrl/admin/$controller/$action";
         }
 
-        // Add ID to the URL if provided
         if ($id !== null) {
             $url .= "/$id";
         }
@@ -55,8 +58,6 @@ class Controller
         header("Location: $url");
         exit;
     }
-
-
 
     protected function renderForLoginAdmin($view, $data = [])
     {

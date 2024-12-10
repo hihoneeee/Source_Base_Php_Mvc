@@ -72,7 +72,7 @@ use App\Helpers\UrlAction;
                 <td class="px-6 py-4"><?php echo htmlspecialchars($category->title); ?></td>
                 <td class="px-6 py-4"><?php echo htmlspecialchars($category->description); ?></td>
                 <td class="px-6 py-4">
-                    <img src="/App/Uploads/Category/<?php echo htmlspecialchars($category->avatar); ?>"
+                    <img src="/App/Public/Uploads/Category/<?php echo htmlspecialchars($category->avatar); ?>"
                         alt="Category Image" class="w-16 h-16 object-cover rounded">
                 </td>
 
@@ -103,5 +103,5 @@ use App\Helpers\UrlAction;
 </div>
 
 <?php
-PaginationHelper::render($paginationDTO);
+PaginationHelper::renderAdmin($paginationDTO);
 ?>

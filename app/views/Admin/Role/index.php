@@ -95,6 +95,6 @@ use App\Helpers\UrlAction;
     </div>
 
     <?php
-    PaginationHelper::render($paginationDTO);
+    PaginationHelper::renderAdmin($paginationDTO);
     ?>
 </div>

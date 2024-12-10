@@ -6,10 +6,10 @@ use App\DTOs\Common\PaginationDTO;
 
 class PaginationHelper
 {
-    public static function render(PaginationDTO $paginationDTO)
+    public static function renderAdmin(PaginationDTO $paginationDTO)
     {
         $currentPage = $paginationDTO->getCurrentPage();
-        $totalPages = $paginationDTO->getTotalPages();  
+        $totalPages = $paginationDTO->getTotalPages();
 
         // Kiểm tra xem đường dẫn hiện tại có nằm trong khu vực admin hay không
         $isInAdminArea = strpos(trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'), 'admin') === 0;
@@ -47,6 +47,41 @@ class PaginationHelper
 
             echo '</ul>';
             echo '</nav>';
+        }
+    }
+
+    public static function renderPublic(PaginationDTO $paginationDTO)
+    {
+        $currentPage = $paginationDTO->getCurrentPage();
+        $totalPages = $paginationDTO->getTotalPages();
+
+        if ($totalPages > 1) {
+            echo '<div class="row text-start pt-5 border-top">';
+            echo '<div class="col-md-12">';
+            echo '<div class="custom-pagination">';
+
+            // Previous button
+            if ($currentPage > 1) {
+                echo '<a href="' . $paginationDTO->generateUrl($currentPage - 1) . '">&laquo;</a>';
+            }
+
+            // Page numbers
+            for ($i = 1; $i <= $totalPages; $i++) {
+                if ($i == $currentPage) {
+                    echo '<span>' . $i . '</span>';
+                } else {
+                    echo '<a href="' . $paginationDTO->generateUrl($i) . '">' . $i . '</a>';
+                }
+            }
+
+            // Next button
+            if ($currentPage < $totalPages) {
+                echo '<a href="' . $paginationDTO->generateUrl($currentPage + 1) . '">&raquo;</a>';
+            }
+
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
         }
     }
 }

@@ -15,8 +15,8 @@ use App\Helpers\UrlAction;
                     <div class="flex flex-col items-center">
                         <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-300 relative">
                             <img id="avatarPreview"
-                                src="/App/Uploads/User/<?php echo htmlspecialchars($user->avatar); ?>" alt="Avatar"
-                                class="w-full h-full object-cover">
+                                src="/App/Public/Uploads/User/<?php echo htmlspecialchars($user->avatar); ?>"
+                                alt="Avatar" class="w-full h-full object-cover">
                             <input type="file" id="avatarInput" name="avatar" class="hidden" accept="image/*"
                                 onchange="previewAvatar(event)">
                             <button type="button" onclick="document.getElementById('avatarInput').click()"
@@ -24,7 +24,7 @@ use App\Helpers\UrlAction;
                                 Thay đổi
                             </button>
                             <?php if (!empty($errors['avatar'])): ?>
-                                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -37,7 +37,7 @@ use App\Helpers\UrlAction;
                                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 value="<?php echo htmlspecialchars($user->first_name ?? ''); ?>">
                             <?php if (!empty($errors['first_name'])): ?>
-                                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['first_name']); ?></p>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['first_name']); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="w-[50%]">
@@ -46,7 +46,7 @@ use App\Helpers\UrlAction;
                                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 value="<?php echo htmlspecialchars($user->last_name ?? ''); ?>">
                             <?php if (!empty($errors['last_name'])): ?>
-                                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['last_name']); ?></p>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['last_name']); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -57,7 +57,7 @@ use App\Helpers\UrlAction;
                             class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             value="<?php echo htmlspecialchars($user->email ?? ''); ?>">
                         <?php if (!empty($errors['email'])): ?>
-                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
                         <?php endif; ?>
                     </div>
 
@@ -67,7 +67,7 @@ use App\Helpers\UrlAction;
                             class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             value="<?php echo htmlspecialchars($user->phone ?? ''); ?>">
                         <?php if (!empty($errors['phone'])): ?>
-                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['phone']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['phone']); ?></p>
                         <?php endif; ?>
                     </div>
 
@@ -108,15 +108,15 @@ use App\Helpers\UrlAction;
 
 </div>
 <script>
-    function previewAvatar(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const avatarPreview = document.getElementById('avatarPreview');
-                avatarPreview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
+function previewAvatar(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatarPreview = document.getElementById('avatarPreview');
+            avatarPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
+}
 </script>

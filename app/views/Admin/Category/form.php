@@ -49,7 +49,7 @@ use App\Helpers\UrlAction;
                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value="<?php echo htmlspecialchars($category->title ?? ''); ?>">
             <?php if (!empty($errors['title'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['title']); ?></p>
+            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['title']); ?></p>
             <?php endif; ?>
         </div>
 
@@ -59,7 +59,7 @@ use App\Helpers\UrlAction;
             <textarea name="description" id="description" placeholder="Nhập mô tả..."
                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><?php echo htmlspecialchars($category->description ?? ''); ?></textarea>
             <?php if (!empty($errors['description'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['description']); ?></p>
+            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['description']); ?></p>
             <?php endif; ?>
         </div>
 
@@ -70,14 +70,14 @@ use App\Helpers\UrlAction;
                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 onchange="previewImage(event)">
             <?php if (isset($category) && !empty($category->avatar)): ?>
-                <!-- Hiển thị ảnh cũ -->
-                <img id="imagePreview" src="/App/Uploads/Category/<?php echo htmlspecialchars($category->avatar); ?>"
-                    alt="Ảnh danh mục" class="mt-4 max-h-48">
+            <!-- Hiển thị ảnh cũ -->
+            <img id="imagePreview" src="/App/Public/Uploads/Category/<?php echo htmlspecialchars($category->avatar); ?>"
+                alt="Ảnh danh mục" class="mt-4 max-h-48">
             <?php else: ?>
-                <img id="imagePreview" src="#" alt="Preview ảnh" class="hidden mt-4 max-h-48">
+            <img id="imagePreview" src="#" alt="Preview ảnh" class="hidden mt-4 max-h-48">
             <?php endif; ?>
             <?php if (!empty($errors['avatar'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
+            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
             <?php endif; ?>
         </div>
 
@@ -91,21 +91,3 @@ use App\Helpers\UrlAction;
         </div>
     </form>
 </div>
-
-<script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('imagePreview');
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = "#";
-            preview.classList.add('hidden');
-        }
-    }
-</script>

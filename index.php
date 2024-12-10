@@ -66,7 +66,7 @@ $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
 $fakeDataController = new Controllers\FakeDataController($fakeDataService);
 
-$publicController = new Controllers\PublicController();
+$publicController = new Controllers\PublicController($categoryRepository, $categoryService, $postRepository, $postService, $authService, $roleRepository, $userService);
 
 // Khởi tạo middleware
 $authMiddleware = new AuthMiddleware();

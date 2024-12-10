@@ -8,7 +8,6 @@ use App\Helpers\ServiceResponse;
 use App\Helpers\ServiceResponseExtensions;
 use App\Data\Models\Post;
 use App\DTOs\Post as PostDTO;
-use App\Helpers\HandleFileUpload;
 use App\Repositories\CategoryRepository;
 use Exception;
 
@@ -30,6 +29,7 @@ class PostService
     {
         $response = new ServiceResponse();
         try {
+
             $data = $this->_postRepo->getAllPostsByAdmin($limit, $page, $name);
             $response->data = $data['posts'];
             $response->total = $data['total'];
@@ -67,6 +67,15 @@ class PostService
                 ServiceResponseExtensions::setNotFound($response, "Bài viết");
                 return $response;
             }
+            if ($_SESSION['user_info']->role != 'Admin' && $post->user_id != $_SESSION['user_info']->id) {
+                ServiceResponseExtensions::setUnauthorized($response, "Người viết không hợp lệ!");
+                return $response;
+            }
+
+            if ($_SESSION['user_info']->role != 'Admin' && $post->status != 'pending') {
+                ServiceResponseExtensions::setUnauthorized($response, "Bài viết đã hoàn thành rồi!");
+                return $response;
+            }
             $response->data = $post;
             ServiceResponseExtensions::setSuccess($response, "Lấy bài viết thành công!");
         } catch (Exception $ex) {
@@ -74,6 +83,43 @@ class PostService
         }
         return $response;
     }
+
+    public function getPostDetail($id)
+    {
+        $response = new ServiceResponse();
+        try {
+            $data = $this->_postRepo->getPostDetail($id);
+            if ($data['post'] == false) {
+                ServiceResponseExtensions::setNotFound($response, "Bài viết");
+                return $response;
+            }
+
+            // Map Post
+            $postDTO = $this->_mapper->map($data['post'], new PostDTO\GetPostDTO());
+            $postDTO->dataCategory = ['id' => $data['post']->categoryId, 'title' => $data['post']->categoryTitle];
+            $postDTO->dataDetail = [
+                'title' => $data['post']->title,
+                'meta' => $data['post']->meta,
+                'content' => $data['post']->content,
+                'avatar' => $data['post']->avatar
+            ];
+            // Map User
+            $postDTO->dataUser = [
+                'userId' => $data['user']->userId,
+                'fullName' => $data['user']->fullName,
+                'email' => $data['user']->email,
+                'phone' => $data['user']->phone,
+                'avatar' => $data['user']->avatar,
+            ];
+
+            $response->data = $postDTO;
+            ServiceResponseExtensions::setSuccess($response, "Lấy bài viết thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
+
 
     public function createPost(PostDTO\FormPostDTO $formPostDTO, PostDTO\FormPostDetailDTO $formPostDetailDTO)
     {
@@ -114,10 +160,17 @@ class PostService
                 ServiceResponseExtensions::setNotFound($response, "Bài viết");
                 return $response;
             }
-            if ($formPostDTO->user_id != $_SESSION['user_info']->id) {
-                ServiceResponseExtensions::setUnauthorized($response, "Người viết không hợp lệ");
+
+            if ($_SESSION['user_info']->role != 'Admin' && $checkPost->user_id != $_SESSION['user_info']->id) {
+                ServiceResponseExtensions::setUnauthorized($response, "Người viết không hợp lệ!");
                 return $response;
             }
+
+            if ($_SESSION['user_info']->role != 'Admin' && $checkPost->status != 'pending') {
+                ServiceResponseExtensions::setUnauthorized($response, "Bài viết đã được duyệt hoặc ẩn đi");
+                return $response;
+            }
+
             $checkCategory = $this->_categoryRepo->getCategoryById($formPostDTO->category_id);
             if ($checkCategory == null) {
                 ServiceResponseExtensions::setNotFound($response, "Danh mục");
@@ -125,6 +178,7 @@ class PostService
             }
             $checkPost->category_id = $formPostDTO->category_id;
             $checkPost->status = $formPostDTO->status;
+            $checkPost->updated_at = date('Y-m-d H:i:s');
             $post = new Post();
             $mapper = $this->_mapper->map($checkPost, $post);
             $this->_postRepo->updatePost($id, $mapper);
@@ -143,6 +197,15 @@ class PostService
             $checkPost = $this->_postRepo->getPostById($id);
             if ($checkPost == null) {
                 ServiceResponseExtensions::setNotFound($response, "Bài viết");
+                return $response;
+            }
+            if (trim($_SESSION['user_info']->role) != 'Admin' && $_SESSION['user_info']->id != $checkPost->user_id) {
+                ServiceResponseExtensions::setUnauthorized($response, "Người viết không hợp lệ!");
+                return $response;
+            }
+
+            if (trim($_SESSION['user_info']->role) != 'Admin' && $checkPost->status != 'pending') {
+                ServiceResponseExtensions::setUnauthorized($response, "Bài viết đã được duyệt hoặc ẩn đi");
                 return $response;
             }
             $this->_postRepo->deletePostById($id);

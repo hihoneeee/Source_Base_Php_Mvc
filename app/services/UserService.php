@@ -82,7 +82,7 @@ class UserService
         try {
             $checkEmail = $this->_userRepo->getUserByEmail($createUserDTO->email);
             if ($checkEmail) {
-                ServiceResponseExtensions::setExisting($response, "Người dùng");
+                ServiceResponseExtensions::setExisting($response, "Email");
                 return $response;
             }
             $createUserDTO->password = HashPassword::GenerateHash($createUserDTO->password);

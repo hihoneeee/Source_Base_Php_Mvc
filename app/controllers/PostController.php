@@ -45,7 +45,10 @@ class PostController extends Controller
     }
     public function create()
     {
-        $this->render('Admin', 'Post/form');
+        $dataCategory = $this->_categoryRepo->getListCategories();
+        $getUser = $this->_userRepo->getUserById($_SESSION['user_info']->id);
+        $userFullName = $getUser->first_name . ' ' . $getUser->last_name;
+        $this->render('Admin', 'Post/form', ['categories' => $dataCategory, 'userFullName' => $userFullName]);
     }
     public function store()
     {
@@ -60,6 +63,7 @@ class PostController extends Controller
             $this->render('Admin', 'Post/form', ['errors' => $formPostDetailDTO->errors]);
             return;
         }
+
         $response = $this->_postService->createPost($formPostDTO, $formPostDetailDTO);
         $_SESSION['toastMessage'] = $response->message;
         $_SESSION['toastSuccess'] = $response->success;
@@ -71,15 +75,17 @@ class PostController extends Controller
     }
     public function edit($id)
     {
+
         $response = $this->_postService->getPostById($id);
         if ($response->success) {
             $dataCategory = $this->_categoryRepo->getListCategories();
-            $getUser = $this->_userRepo->getUserById($_SESSION['user_info']->id);
+            $getUser = $this->_userRepo->getUserById($response->data->user_id);
             $userFullName = $getUser->first_name . ' ' . $getUser->last_name;
-            $post = $response->data;
-            $this->render('Admin', 'Post/form', ['post' => $post, 'categories' => $dataCategory, 'userFullName' => $userFullName]);
+            $this->render('Admin', 'Post/form', ['post' => $response->data, 'categories' => $dataCategory, 'userFullName' => $userFullName]);
         } else {
-            $this->render('Admin', 'Home/error', ['message' => 'Post not found']);
+            $_SESSION['toastMessage'] = $response->message;
+            $_SESSION['toastSuccess'] = $response->success;
+            $this->redirectToAction('admin', 'post', 'index');
         }
     }
     public function update($id)
@@ -115,7 +121,7 @@ class PostController extends Controller
         if ($response->success) {
             $this->redirectToAction('admin', 'post', 'index');
         } else {
-            $this->redirectToAction('admin', 'home', '404');
+            $this->redirectToAction('admin', 'post', 'index');
         }
     }
 }

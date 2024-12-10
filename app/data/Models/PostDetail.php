@@ -10,13 +10,4 @@ class PostDetail
     public $content;
     public $post_id;
     public $avatar;
-    public $created_at;
-    public $updated_at;
-
-    public function __construct()
-    {
-        $this->created_at = date('Y-m-d H:i:s');
-        $this->updated_at = date('Y-m-d H:i:s');
-    }
-
 }

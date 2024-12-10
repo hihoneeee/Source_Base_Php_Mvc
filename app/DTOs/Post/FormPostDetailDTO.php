@@ -18,7 +18,7 @@ class FormPostDetailDTO
         $this->avatar = $avatar;
     }
 
-    public function isValid($isUpdate = false)
+    public function isValid()
     {
         $this->errors = [];
 
@@ -31,16 +31,14 @@ class FormPostDetailDTO
         if (empty($this->meta)) {
             $this->errors['meta'] = 'Mô tả không được bỏ trống';
         } elseif (strlen($this->meta) < 150) {
-            $this->errors['meta'] = 'Mô tả phải có ít nhất 150 ký tự!';
-        } elseif (strlen($this->meta) > 160) {
-            $this->errors['meta'] = 'Mô tả không được quá 160 ký tự!';
+            $this->errors['meta'] = 'Mô tả phải có ít nhất 130 ký tự!';
         }
 
         if (empty($this->content)) {
             $this->errors['content'] = 'Nội dung không được bỏ trống';
         }
 
-        if (!$isUpdate || ($this->avatar && $this->avatar['error'] === UPLOAD_ERR_OK)) {
+        if ($this->avatar && $this->avatar['error'] === UPLOAD_ERR_OK) {
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
             $fileName = $this->avatar['name'];
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));

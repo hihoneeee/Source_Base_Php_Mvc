@@ -28,7 +28,8 @@
                 </div>
                 <button type="submit" class="btn btn-success w-100">Đăng ký</button>
                 <p class="text-center mt-3">
-                    Bạn đã có tài khoản? <a href="#" id="toggleToLogin" class="text-success fw-bold">Đăng nhập ngay!</a>
+                    Bạn đã có tài khoản? <a href="/dang-nhap" id="toggleToLogin" class="text-success fw-bold">Đăng nhập
+                        ngay!</a>
                 </p>
             </form>
         </div>

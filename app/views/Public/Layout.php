@@ -77,8 +77,7 @@
                                     class="btn btn-outline-white py-2 dropdown-toggle d-flex align-items-center gap-2"
                                     id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle"></i>
-                                    <span><?php echo htmlspecialchars($_SESSION['user_info']->first_name); ?>
-                                        <?php echo htmlspecialchars($_SESSION['user_info']->last_name); ?></span>
+                                    <span><?php echo htmlspecialchars($_SESSION['user_info']->last_name); ?></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu"
                                     aria-labelledby="userMenu">
@@ -118,12 +117,12 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="widget">
-                        <h3 class="mb-4">About</h3>
+                        <h3 class="mb-4">VỀ CHÚNG TÔI</h3>
                         <p>Xa xa, đằng sau những ngọn núi chữ, xa khỏi đất nước Vokalia và Consonantia, có những văn bản
                             mù.</p>
                     </div> <!-- /.widget -->
                     <div class="widget">
-                        <h3>Social</h3>
+                        <h3>MẠNG XÃ HỘI</h3>
                         <ul class="list-unstyled social">
                             <li><a href="#"><span class="icon-instagram"></span></a></li>
                             <li><a href="#"><span class="icon-twitter"></span></a></li>

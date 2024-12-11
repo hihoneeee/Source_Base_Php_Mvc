@@ -32,29 +32,29 @@ use App\Helpers\PaginationHelper;
         <div class="row posts-entry">
             <div class="col-lg-8">
                 <?php if (!empty($category->dataPost)): ?>
-                    <?php foreach ($category->dataPost as $post): ?>
-                        <div class="blog-entry d-flex blog-entry-search-item">
-                            <a href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>" class="img-link me-4">
-                                <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>" alt="Image"
-                                    class="img-fluid">
-                            </a>
-                            <div>
-                                <span class="date">
-                                    <?php echo htmlspecialchars(date('d M, Y', strtotime($post->updated_at))); ?> &bullet;
-                                    <a href="#"><?php echo htmlspecialchars($post->fullName); ?></a>
-                                </span>
-                                <h2>
-                                    <a
-                                        href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>"><?php echo htmlspecialchars($post->postTitle); ?></a>
-                                </h2>
-                                <p><?= strip_tags($post->meta) ?></p>
-                                <p><a href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>"
-                                        class="btn btn-sm btn-outline-primary">Xem thêm</a></p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                <?php foreach ($category->dataPost as $post): ?>
+                <div class="blog-entry d-flex blog-entry-search-item">
+                    <a href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>" class="img-link me-4">
+                        <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>" alt="Image"
+                            class="img-fluid">
+                    </a>
+                    <div>
+                        <span class="date">
+                            <?php echo htmlspecialchars(date('d M, Y', strtotime($post->updated_at))); ?> &bullet;
+                            <a href="#"><?php echo htmlspecialchars($post->fullName); ?></a>
+                        </span>
+                        <h2>
+                            <a
+                                href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>"><?php echo htmlspecialchars($post->postTitle); ?></a>
+                        </h2>
+                        <p><?= strip_tags($post->meta) ?></p>
+                        <p><a href="/tin-tuc/<?php echo htmlspecialchars($post->id); ?>"
+                                class="btn btn-sm btn-outline-primary">Xem thêm</a></p>
+                    </div>
+                </div>
+                <?php endforeach; ?>
                 <?php else: ?>
-                    <p>Không có bài viết nào trong danh mục này.</p>
+                <p>Không có bài viết nào trong danh mục này.</p>
                 <?php endif; ?>
 
                 <?php
@@ -69,18 +69,18 @@ use App\Helpers\PaginationHelper;
                     <div class="post-entry-sidebar">
                         <ul>
                             <?php foreach ($postRandom as $post): ?>
-                                <li>
-                                    <a href="">
-                                        <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>"
-                                            alt="Image placeholder" class="me-4 rounded">
-                                        <div class="text">
-                                            <h4><?php echo htmlspecialchars($post->title); ?></h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2"><?php echo htmlspecialchars($post->updated_at); ?></span>
-                                            </div>
+                            <li>
+                                <a href="">
+                                    <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>"
+                                        alt="Image placeholder" class="me-4 rounded">
+                                    <div class="text">
+                                        <h4><?php echo htmlspecialchars($post->title); ?></h4>
+                                        <div class="post-meta">
+                                            <span class="mr-2"><?php echo htmlspecialchars($post->updated_at); ?></span>
                                         </div>
-                                    </a>
-                                </li>
+                                    </div>
+                                </a>
+                            </li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -91,12 +91,12 @@ use App\Helpers\PaginationHelper;
                     <h3 class="heading">Danh mục</h3>
                     <ul class="categories">
                         <?php foreach ($categories as $category): ?>
-                            <li>
-                                <a href="#">
-                                    <?php echo htmlspecialchars($category->title); ?>
-                                    <span>(<?php echo $category->postCount; ?>)</span>
-                                </a>
-                            </li>
+                        <li>
+                            <a href="#">
+                                <?php echo htmlspecialchars($category->title); ?>
+                                <span>(<?php echo $category->postCount; ?>)</span>
+                            </a>
+                        </li>
                         <?php endforeach; ?>
 
                     </ul>

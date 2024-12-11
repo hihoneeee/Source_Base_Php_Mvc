@@ -18,25 +18,35 @@ class JwtToken
         $this->_roleRepo = $roleRepo;
     }
 
-    public function generateJWTToken(string $id, string $firstName, string $lastName, string $email, string $roleId, string $avatar, int $expire): string
-    {
+    public function generateJWTToken(
+        string $id,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $roleId,
+        ?string $avatar,  // Cho phép avatar là null
+        int $expire
+    ): string {
         $role = $this->_roleRepo->getRoleById($roleId);
         if (!$role) {
             throw new \Exception("Role not found for ID: $roleId");
         }
 
+        // Xây dựng payload
         $payload = [
             'sub' => $id,
             'role' => $role->value,
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
-            'avatar' => $avatar,
+            'avatar' => $avatar,  // Avatar có thể là null
             'iat' => time(),
             'exp' => $expire
         ];
+
         return JWT::encode($payload, $this->_secret, 'HS256');
     }
+
 
     public static function decodeJWTToken(string $token)
     {

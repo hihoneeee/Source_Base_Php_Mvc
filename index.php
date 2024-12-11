@@ -18,6 +18,7 @@ use App\Routers\Public as RouterPublic;
 use App\Helpers\JwtToken;
 use App\Middlewares\AuthMiddleware;
 use App\Middlewares\HandleMiddleware;
+use App\Repositories\PostDetailRepository;
 
 // Khởi tạo session và buffer
 session_start();
@@ -51,6 +52,9 @@ $postDetailService = new Services\PostDetailService($postDetailRepository, $mapp
 $postRepository = new Repositories\PostRepository($db);
 $postService = new Services\PostService($postRepository, $mapper, $categoryRepository, $postDetailService);
 
+$commentRepository = new Repositories\CommentRepository($db);
+$commentService = new Services\CommentService($commentRepository, $mapper, $postDetailRepository);
+
 // Khởi tạo hepler
 $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 
@@ -61,12 +65,12 @@ $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
 $categoryController = new Controllers\CategoryController($categoryService);
 $postController = new Controllers\PostController($postService, $categoryRepository, $userRepository);
+$commentController = new Controllers\CommentController($commentService);
 
 $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
 $fakeDataController = new Controllers\FakeDataController($fakeDataService);
-
-$publicController = new Controllers\PublicController($categoryRepository, $categoryService, $postRepository, $postService, $authService, $roleRepository, $userService);
+$publicController = new Controllers\PublicController($categoryRepository, $categoryService, $postRepository, $postService, $authService, $roleRepository, $userService, $commentService);
 
 // Khởi tạo middleware
 $authMiddleware = new AuthMiddleware();
@@ -81,24 +85,24 @@ $router = new Core\Router([
     'RoleController' => $roleController,
     'CategoryController' => $categoryController,
     'PostController' => $postController,
+    'CommentController' => $commentController,
 
     'AdminController' => $adminController,
     'AuthController' => $authController,
     'FakeDataController' => $fakeDataController,
-
     'PublicController' => $publicController
 ]);
 
 // Đăng ký các route
-RouterAdmin\AdminRouter::register($router);
 RouterAdmin\UserRouter::register($router);
 RouterAdmin\RoleRouter::register($router);
 RouterAdmin\CategoryRouter::register($router);
 RouterAdmin\PostRouter::register($router);
+RouterPublic\CommentRouter::register($router);
 
+RouterAdmin\AdminRouter::register($router);
 RouterAdmin\AuthRouter::register($router);
 RouterAdmin\FakerDataRouter::register($router);
-
 RouterPublic\PublicRouter::register($router);
 
 // Lấy URL và xử lý routing

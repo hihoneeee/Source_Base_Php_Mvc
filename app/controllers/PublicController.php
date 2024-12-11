@@ -11,6 +11,7 @@ use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
 use App\Services\AuthService;
 use App\Services\CategoryService;
+use App\Services\CommentService;
 use App\Services\PostService;
 use App\Services\UserService;
 
@@ -23,8 +24,9 @@ class PublicController extends Controller
     private $_authService;
     private $_roleRepo;
     private $_userService;
+    private $_commentService;
 
-    public function __construct(CategoryRepository $_categoryRepo, CategoryService $categoryService, PostRepository $postRepo, PostService $postService, AuthService $authService, RoleRepository $roleRepo, UserService $userService)
+    public function __construct(CategoryRepository $_categoryRepo, CategoryService $categoryService, PostRepository $postRepo, PostService $postService, AuthService $authService, RoleRepository $roleRepo, UserService $userService, CommentService $commentService)
     {
         $this->_categoryRepo = $_categoryRepo;
         $this->_categoryService = $categoryService;
@@ -33,6 +35,7 @@ class PublicController extends Controller
         $this->_authService = $authService;
         $this->_roleRepo = $roleRepo;
         $this->_userService = $userService;
+        $this->_commentService = $commentService;
     }
     public function Index()
     {
@@ -65,16 +68,25 @@ class PublicController extends Controller
 
     public function Post($id)
     {
-        $postDetailResponse = $this->_postService->getPostDetail($id);
-        if ($postDetailResponse->success) {
-            $postDetail = $postDetailResponse->data;
+        $response = $this->_postService->getPostDetail($id);
+        if ($response->success) {
+
+            $limit = LIMIT;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $commentList = $this->_commentService->getListCommentsByPostId($response->data->dataDetail['id'], $limit, $page);
+            $totalPages = ceil($commentList->total / $limit);
+            $paginationDTO = new PaginationDTO($page, $totalPages, "danh-muc/{$id}");
+
             $categories = $this->_categoryRepo->getListCategories();
-            $getPostByCategory = $this->_postRepo->getPostsByCategoryId($postDetail->dataCategory['id']);
+            $getPostByCategory = $this->_postRepo->getPostsByCategoryId($response->data->dataCategory['id']);
 
             $this->render('Public', 'Post/detail', [
-                'postDetail' => $postDetail,
+                'postDetail' => $response->data,
                 'categories' => $categories,
-                'getPostByCategory' => $getPostByCategory
+                'getPostByCategory' => $getPostByCategory,
+                'commentList' => $commentList->data,
+                'totalComments' => $commentList->total,
+                'paginationDTO' => $paginationDTO,
             ]);
         } else {
             $this->redirectToAction('public', '404');

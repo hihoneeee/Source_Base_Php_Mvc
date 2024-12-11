@@ -59,12 +59,13 @@ class CategoryRepository
                 c.title, 
                 COUNT(p.id) AS postCount
             FROM categories c
-            LEFT JOIN posts p ON c.id = p.category_id
+            LEFT JOIN posts p ON c.id = p.category_id AND p.status = 'completed'
             GROUP BY c.id, c.title";
         $stmt = $this->_db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
 
 
     public function getCategoryDetailsById($categoryId, $limit, $page)

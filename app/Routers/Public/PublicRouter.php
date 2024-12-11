@@ -44,5 +44,9 @@ class PublicRouter
             'controller' => 'PublicController',
             'action' => 'Logout',
         ]);
+        $router->add('tim-kiem', [
+            'controller' => 'PublicController',
+            'action' => 'Search',
+        ]);
     }
 }

@@ -98,6 +98,7 @@ class PostService
             $postDTO = $this->_mapper->map($data['post'], new PostDTO\GetPostDTO());
             $postDTO->dataCategory = ['id' => $data['post']->categoryId, 'title' => $data['post']->categoryTitle];
             $postDTO->dataDetail = [
+                'id' => $data['post']->postDetailId,
                 'title' => $data['post']->title,
                 'meta' => $data['post']->meta,
                 'content' => $data['post']->content,

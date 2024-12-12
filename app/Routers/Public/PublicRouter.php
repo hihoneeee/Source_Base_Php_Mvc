@@ -48,5 +48,9 @@ class PublicRouter
             'controller' => 'PublicController',
             'action' => 'Search',
         ]);
+        $router->add('trang-ca-nhan/{id}', [
+            'controller' => 'PublicController',
+            'action' => 'Profile',
+        ]);
     }
 }

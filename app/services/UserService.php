@@ -75,6 +75,43 @@ class UserService
         return $response;
     }
 
+    public function getProfileById($id)
+    {
+        $response = new ServiceResponse();
+        try {
+            $data = $this->_userRepo->getProfileById($id);
+            if ($data['user'] == null) {
+                ServiceResponseExtensions::setNotFound($response, "Người viết không tồn tại!");
+                return $response;
+            }
+            $userDTO = new UserDTO\ProfileUserDTO();
+            $profileDTO = $this->_mapper->map($data['user'], $userDTO);
+            $profileDTO->dataPosts = array_map(function ($post) {
+                return (object) [
+                    'id' => $post->id,
+                    'user_id' => $post->user_id,
+                    'category_id' => $post->category_id,
+                    'created_at' => $post->created_at,
+                    'status' => $post->status,
+                    'title' => $post->title,
+                    'content' => $post->content,
+                    'meta' => $post->meta,
+                    'avatar' => $post->avatar,
+                    'categoryId' => $post->categoryId,
+                    'categoryTitle' => $post->categoryTitle,
+                ];
+            }, $data['posts']);
+
+            $response->data = $profileDTO;
+            $response->total = $data['total'];
+            ServiceResponseExtensions::setSuccess($response, "Lấy thông tin thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
+
+
     public function createUser(UserDTO\CreateUserDTO $createUserDTO)
     {
         $response = new ServiceResponse();

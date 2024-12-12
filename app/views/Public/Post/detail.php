@@ -30,7 +30,7 @@
                 <div>
                     <p>Danh mục: <a href="/danh-muc/"><?= $postDetail->dataCategory['title'] ?></a></p>
                 </div>
-                <?php if (!empty($_COOKIE['testToken'])): ?>
+                <?php if (empty($_COOKIE['testToken'])): ?>
                 <div class="container mt-4">
                     <div class="d-flex align-items-start">
                         <!-- Avatar -->
@@ -115,7 +115,9 @@
                             <h2>Tác giả: <?= $postDetail->dataUser['fullName'] ?></h2>
                             <p>Email: <?= $postDetail->dataUser['email'] ?></p>
                             <p>Phone: <?= $postDetail->dataUser['phone'] ?></p>
-                            <p><a href="#" class="btn btn-primary btn-sm rounded px-2 py-2">Xem chi tiết</a></p>
+                            <p><a href="/trang-ca-nhan/<?= $postDetail->dataUser['userId'] ?>"
+                                    class="btn btn-primary btn-sm rounded px-2 py-2">Xem chi
+                                    tiết</a></p>
                             <p class="social">
                                 <a href="#" class="p-2"><span class="icon-facebook"></span></a>
                                 <a href="#" class="p-2"><span class="icon-instagram"></span></a>

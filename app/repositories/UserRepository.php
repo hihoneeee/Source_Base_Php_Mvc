@@ -69,10 +69,43 @@ class UserRepository
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public function getUserByPostId($postId)
+    public function getProfileById($id)
     {
+        $queryUser = "SELECT u.*, r.value
+                      FROM users u
+                      JOIN roles r ON u.role_id = r.id
+                      WHERE u.id = :id";
+        $stmt = $this->_db->prepare($queryUser);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_OBJ);
 
+        $queryPost = "SELECT p.*, pd.content, pd.title, pd.meta, pd.avatar, c.id as categoryId, c.title as categoryTitle
+                      FROM posts p
+                      JOIN categories c ON p.category_id = c.id
+                      JOIN postDetail pd ON p.id = pd.post_id
+                      WHERE p.user_id = :id AND p.status = 'completed'
+                      ORDER BY p.updated_at DESC";
+        $stmt = $this->_db->prepare($queryPost);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $posts = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        $queryTotal = "SELECT COUNT(*) as total
+                       FROM posts
+                       WHERE user_id = :id AND status = 'completed'";
+        $stmt = $this->_db->prepare($queryTotal);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $total = $stmt->fetch(PDO::FETCH_OBJ)->total;
+
+        return [
+            'user' => $user,
+            'posts' => $posts,
+            'total' => $total
+        ];
     }
+
 
     public function createUser(User $user)
     {

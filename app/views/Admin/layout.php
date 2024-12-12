@@ -87,33 +87,33 @@
                 </ul>
                 <?php if ($_SESSION['user_info']->role === 'Admin') : ?>
 
-                <div
-                    class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
-                    System Menu
-                </div>
-                <ul class="space-y-2">
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'user', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
-                            <i class="ri-group-line mr-2 text-lg"></i>
-                            <span>Quản lý người dùng</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
-                            <i class="ri-user-settings-line mr-2 text-lg"></i>
-                            <span>Quản lý vai trò</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo UrlAction::action('admin', 'category', 'index'); ?>"
-                            class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
-                            <i class="ri-contacts-book-line mr-2 text-lg"></i>
-                            <span>Quản lý danh mục</span>
-                        </a>
-                    </li>
-                </ul>
+                    <div
+                        class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
+                        System Menu
+                    </div>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="<?php echo UrlAction::action('admin', 'user', 'index'); ?>"
+                                class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                                <i class="ri-group-line mr-2 text-lg"></i>
+                                <span>Quản lý người dùng</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo UrlAction::action('admin', 'role', 'index'); ?>"
+                                class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                                <i class="ri-user-settings-line mr-2 text-lg"></i>
+                                <span>Quản lý vai trò</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo UrlAction::action('admin', 'category', 'index'); ?>"
+                                class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                                <i class="ri-contacts-book-line mr-2 text-lg"></i>
+                                <span>Quản lý danh mục</span>
+                            </a>
+                        </li>
+                    </ul>
                 <?php endif; ?>
 
                 <div
@@ -184,31 +184,31 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    clifford: '#da373d',
-                },
-                backgroundColor: {
-                    "overlay-10": "rgba(0,0,0,0.1)",
-                    "overlay-20": "rgba(0,0,0,0.2)",
-                    "overlay-30": "rgba(0,0,0,0.3)",
-                    "overlay-50": "rgba(0,0,0,0.5)",
-                    "overlay-70": "rgba(0,0,0,0.7)",
-                },
-                fontSize: {
-                    xxs: ".5rem",
-                },
-                screens: {
-                    mobile: "640px", // Kích thước mobile
-                    tablet: "768px", // Kích thước tablet
-                    laptop: "1366px", // Kích thước laptop
-                    desktop: "1920px", // Kích thước màn hình 23.8 inch
-                },
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                    },
+                    backgroundColor: {
+                        "overlay-10": "rgba(0,0,0,0.1)",
+                        "overlay-20": "rgba(0,0,0,0.2)",
+                        "overlay-30": "rgba(0,0,0,0.3)",
+                        "overlay-50": "rgba(0,0,0,0.5)",
+                        "overlay-70": "rgba(0,0,0,0.7)",
+                    },
+                    fontSize: {
+                        xxs: ".5rem",
+                    },
+                    screens: {
+                        mobile: "640px", // Kích thước mobile
+                        tablet: "768px", // Kích thước tablet
+                        laptop: "1366px", // Kích thước laptop
+                        desktop: "1920px", // Kích thước màn hình 23.8 inch
+                    },
+                }
             }
         }
-    }
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -216,96 +216,96 @@
 
 
     <?php if (isset($_SESSION['toastMessage'])): ?>
-    <script>
-    window.onload = function() {
-        var toastMessage = "<?php echo $_SESSION['toastMessage']; ?>";
-        var toastSuccess = "<?php echo $_SESSION['toastSuccess'] ? 'true' : 'false'; ?>";
+        <script>
+            window.onload = function() {
+                var toastMessage = "<?php echo $_SESSION['toastMessage']; ?>";
+                var toastSuccess = "<?php echo $_SESSION['toastSuccess'] ? 'true' : 'false'; ?>";
 
-        // Cấu hình mặc định cho Toastr
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
+                // Cấu hình mặc định cho Toastr
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
 
-        // Gọi toastr để hiển thị thông báo
-        if (toastSuccess === 'true') {
-            toastr.success(toastMessage);
-        } else {
-            toastr.error(toastMessage);
-        }
-    };
-    </script>
-    <?php
+                // Gọi toastr để hiển thị thông báo
+                if (toastSuccess === 'true') {
+                    toastr.success(toastMessage);
+                } else {
+                    toastr.error(toastMessage);
+                }
+            };
+        </script>
+        <?php
         unset($_SESSION['toastMessage']);
         unset($_SESSION['toastSuccess']);
         ?>
     <?php endif; ?>
 
     <script>
-    // Toggle dropdown menu visibility
-    function toggleUserMenu() {
-        const menu = document.getElementById('userMenu');
-        if (menu.classList.contains('hidden')) {
-            menu.classList.remove('hidden');
-        } else {
-            menu.classList.add('hidden');
+        // Toggle dropdown menu visibility
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
         }
-    }
 
-    // Đóng menu khi click ra ngoài
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('userMenu');
-        const button = document.getElementById('userMenuButton');
-        if (!menu.contains(event.target) && !button.contains(event.target)) {
-            menu.classList.add('hidden');
-        }
-    });
+        // Đóng menu khi click ra ngoài
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = document.getElementById('userMenuButton');
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
     </script>
 
     <script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('imagePreview');
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = "#";
-            preview.classList.add('hidden');
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "#";
+                preview.classList.add('hidden');
+            }
         }
-    }
     </script>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
     <script>
-    ClassicEditor
-        .create(document.querySelector('#content'))
-        .catch(error => {
-            console.error('CKEditor error:', error);
-        });
+        ClassicEditor
+            .create(document.querySelector('#content'))
+            .catch(error => {
+                console.error('CKEditor error:', error);
+            });
 
-    function previewImage(event) {
-        const output = document.getElementById('imagePreview');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.classList.remove('hidden');
-    }
+        function previewImage(event) {
+            const output = document.getElementById('imagePreview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.classList.remove('hidden');
+        }
     </script>
 
 

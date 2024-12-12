@@ -176,8 +176,6 @@ class PostRepository
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-
-
     public function createPost(Post $post)
     {
         $query = "INSERT INTO posts (user_id, category_id, status) VALUES (:user_id, :category_id, :status)";

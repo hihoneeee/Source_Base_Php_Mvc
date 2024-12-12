@@ -30,6 +30,7 @@ class CommentService
         $response = new ServiceResponse();
         try {
             $data = $this->_commentRepo->getListCommentsByPostId($postDetailId, $limit, $page);
+
             $response->data = $data['comments'];
             $response->total = $data['total'];
             $response->limit = $limit;

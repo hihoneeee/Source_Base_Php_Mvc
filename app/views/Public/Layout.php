@@ -81,7 +81,9 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu"
                                     aria-labelledby="userMenu">
-                                    <li><a class="dropdown-item" href="/trang-ca-nhan">Trang cá nhân</a></li>
+                                    <li><a class="dropdown-item"
+                                            href="/trang-ca-nhan/<?= ($_SESSION['user_info']->id); ?>">Trang
+                                            cá nhân</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

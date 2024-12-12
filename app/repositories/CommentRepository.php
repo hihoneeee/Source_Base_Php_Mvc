@@ -31,8 +31,9 @@ class CommentRepository
         $stmt->execute();
         $comments = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        $totalQuery = "SELECT COUNT(*) AS total FROM comments";
+        $totalQuery = "SELECT COUNT(c.id) AS total FROM comments c WHERE c.postDetail_id = :id";
         $totalStmt = $this->_db->prepare($totalQuery);
+        $totalStmt->bindParam(':id', $id, PDO::PARAM_INT);
         $totalStmt->execute();
         $total = $totalStmt->fetchColumn();
 

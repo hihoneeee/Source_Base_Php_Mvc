@@ -157,4 +157,15 @@ class PublicController extends Controller
         $_SESSION['toastSuccess'] = $response->success;
         $this->redirectToAction('public', '', 'index');
     }
+
+    public function Profile($id)
+    {
+        $categories = $this->_categoryRepo->getListCategories();
+        $response = $this->_userService->getProfileById($id);
+        if ($response->success) {
+            $this->render('Public', 'User/profile', ['categories' => $categories, 'user' => $response->data, 'totalPost' => $response->total]);
+        } else {
+            $this->redirectToAction('public', '404');
+        }
+    }
 }

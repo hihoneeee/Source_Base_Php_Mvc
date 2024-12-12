@@ -67,7 +67,7 @@ class JwtToken
         try {
             $decoded = JWT::decode($token, new Key(JWT_SECRET, 'HS256'));
             return (object) [
-                'id' => $decoded->sub,
+                'id' => (int)$decoded->sub,
                 'role' => $decoded->role,
                 'first_name' => $decoded->firstName,
                 'last_name' => $decoded->lastName,

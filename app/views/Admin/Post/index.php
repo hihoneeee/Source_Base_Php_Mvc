@@ -72,42 +72,42 @@ use App\Helpers\UrlAction;
         </thead>
         <tbody>
             <?php if (!empty($posts)): ?>
-            <?php foreach ($posts as $post): ?>
-            <tr
-                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <td class="px-6 py-4 font-medium text-gray-900 dark:text-white text-center">
-                    <?php echo htmlspecialchars($post->id); ?>
-                </td>
-                <td class="px-6 py-4 font-medium text-gray-700 dark:text-gray-300">
-                    <?php
+                <?php foreach ($posts as $post): ?>
+                    <tr
+                        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white text-center">
+                            <?php echo htmlspecialchars($post->id); ?>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-gray-700 dark:text-gray-300">
+                            <?php
                             $shortTitle = strlen($post->title) > 50 ? substr($post->title, 0, 60) . '...' : $post->title;
                             echo htmlspecialchars($shortTitle);
                             ?>
-                </td>
-                <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
-                    <?php
-                            $shortMeta = strlen($post->meta) > 100 ? substr($post->meta, 0, 110) . '...' : $post->meta;
+                        </td>
+                        <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
+                            <?php
+                            $shortMeta = strlen(strip_tags($post->meta)) > 100 ? substr(strip_tags($post->meta), 0, 110) . '...' : $post->meta;
                             echo htmlspecialchars($shortMeta);
                             ?>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>" alt="Post Image"
-                        class="w-24 h-24 object-cover rounded shadow">
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <span
-                        class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                        <?php echo htmlspecialchars($post->categoryName); ?>
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <span
-                        class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                        <?php echo htmlspecialchars($post->fullName); ?>
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <?php
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <img src="/App/Public/Uploads/Post/<?php echo htmlspecialchars($post->avatar); ?>" alt="Post Image"
+                                class="w-24 h-24 object-cover rounded shadow">
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span
+                                class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                <?php echo htmlspecialchars($post->categoryName); ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span
+                                class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                <?php echo htmlspecialchars($post->fullName); ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <?php
                             switch ($post->status) {
                                 case 'pending':
                                     $statusClass = 'bg-yellow-100 text-yellow-800';
@@ -126,33 +126,33 @@ use App\Helpers\UrlAction;
                                     $statusText = 'Unknown';
                             }
                             ?>
-                    <span class="<?php echo $statusClass; ?> text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        <?php echo htmlspecialchars($statusText); ?>
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-center flex flex-col items-center justify-center gap-2">
-                    <?php if ($post->status === 'pending' || $_SESSION['user_info']->role === 'Admin'): ?>
-                    <a href="<?php echo UrlAction::action('admin', 'post', 'edit', [$post->id]); ?>"
-                        class="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-300 font-medium rounded-lg text-xs px-4 py-2 transition">
-                        Sửa
-                    </a>
-                    <form action="<?php echo UrlAction::action('admin', 'post', 'delete', [$post->id]); ?>"
-                        method="POST" class="inline-block">
-                        <button type="submit"
-                            class="text-red-500 hover:text-white border border-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-300 font-medium rounded-lg text-xs px-4 py-2 transition"
-                            onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">
-                            Xóa
-                        </button>
-                    </form>
-                    <?php endif; ?>
-                </td>
+                            <span class="<?php echo $statusClass; ?> text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                <?php echo htmlspecialchars($statusText); ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center flex flex-col items-center justify-center gap-2">
+                            <?php if ($post->status === 'pending' || $_SESSION['user_info']->role === 'Admin'): ?>
+                                <a href="<?php echo UrlAction::action('admin', 'post', 'edit', [$post->id]); ?>"
+                                    class="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-300 font-medium rounded-lg text-xs px-4 py-2 transition">
+                                    Sửa
+                                </a>
+                                <form action="<?php echo UrlAction::action('admin', 'post', 'delete', [$post->id]); ?>"
+                                    method="POST" class="inline-block">
+                                    <button type="submit"
+                                        class="text-red-500 hover:text-white border border-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-300 font-medium rounded-lg text-xs px-4 py-2 transition"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">
+                                        Xóa
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </td>
 
-            </tr>
-            <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
             <?php else: ?>
-            <tr>
-                <td colspan="8" class="text-center py-4 text-gray-500 dark:text-gray-400">Không có bài viết nào.</td>
-            </tr>
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-gray-500 dark:text-gray-400">Không có bài viết nào.</td>
+                </tr>
             <?php endif; ?>
         </tbody>
 

@@ -132,38 +132,4 @@ class PostController extends Controller
             $this->redirectToAction('admin', 'post', 'index');
         }
     }
-
-    public function report()
-    {
-        $categories = $this->_categoryService->getAll();
-        $users = $this->_userService->getAll();
-
-        $this->render('Admin', 'Post/report', [
-            'categories' => $categories,
-            'users' => $users,
-        ]);
-    }
-
-    public function search()
-    {
-        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-        $title = isset($_POST['title']) ? $_POST['title'] : '';
-        $userId = isset($_POST['userId']) ? $_POST['userId'] : '';
-        $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
-
-        $condition = new SearchCondition($title, $userId, $categoryId);
-        $condition->setCurrentPage($page);
-        $condition->setIsPagingUse(true);
-
-        $categories = $this->_categoryService->getAll();
-        $users = $this->_userService->getAll();
-        $response = $this->_postService->getListPostsReport($condition);
-
-        $this->render('Admin', 'Post/report', [
-            'posts' => $response,
-            'condition' => $condition,
-            'categories' => $categories,
-            'users' => $users,
-        ]);
-    }
 }

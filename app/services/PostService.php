@@ -223,4 +223,9 @@ class PostService
     {
         return $this->_postRepo->getListPostsReport($condition);
     }
+
+    public function getListReportByTime(SearchCondition $condition)
+    {
+        return $this->_postRepo->getListReportByTime($condition);
+    }
 }

@@ -66,6 +66,7 @@ $roleController = new Controllers\RoleController($roleService);
 $categoryController = new Controllers\CategoryController($categoryService);
 $postController = new Controllers\PostController($postService, $userService, $categoryService, $categoryRepository, $userRepository);
 $commentController = new Controllers\CommentController($commentService);
+$reportController = new Controllers\ReportController($postService, $userService, $categoryService);
 
 $adminController = new Controllers\AdminController($roleService, $userService);
 $authController = new Controllers\AuthController($authService);
@@ -86,6 +87,7 @@ $router = new Core\Router([
     'CategoryController' => $categoryController,
     'PostController' => $postController,
     'CommentController' => $commentController,
+    'ReportController' => $reportController,
 
     'AdminController' => $adminController,
     'AuthController' => $authController,
@@ -100,6 +102,7 @@ RouterAdmin\CategoryRouter::register($router);
 RouterAdmin\PostRouter::register($router);
 RouterPublic\CommentRouter::register($router);
 
+RouterAdmin\ReportRouter::register($router);
 RouterAdmin\AdminRouter::register($router);
 RouterAdmin\AuthRouter::register($router);
 RouterAdmin\FakerDataRouter::register($router);

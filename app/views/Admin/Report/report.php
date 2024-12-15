@@ -23,7 +23,7 @@ use App\Helpers\UrlAction;
     Thống kê báo cáo bài viết
 </h2>
 <div class="flex items-center justify-between">
-    <form class="w-[60%] flex gap-4" method="post" action="search">
+    <form class="w-[60%] flex gap-4" method="post" action="/admin/report/search">
         <!-- Tìm kiếm theo tiêu đề -->
         <div class="relative w-full">
             <label for="search-title" class="sr-only">Tìm kiếm tiêu đề</label>
@@ -95,10 +95,14 @@ use App\Helpers\UrlAction;
             <?php if (!empty($posts)): ?>
                 <!-- Nút xuất report chỉ hiển thị nếu có dữ liệu -->
                 <div class="flex justify-end mb-4">
-                    <a href="/admin/export-report?<?php echo http_build_query($condition ?? []); ?>"
-                        class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
-                        Xuất báo cáo
-                    </a>
+                <form method="post" action="/admin/report/generator" class="inline">
+                <input type="hidden" name="title" value="<?php echo htmlspecialchars($condition->title ?? ''); ?>">
+                <input type="hidden" name="userId" value="<?php echo htmlspecialchars($condition->userId ?? ''); ?>">
+                <input type="hidden" name="categoryId" value="<?php echo htmlspecialchars($condition->categoryId ?? ''); ?>">
+                <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
+                    Xuất báo cáo
+                </button>
+            </form>
                 </div>
                 <?php foreach ($posts as $post): ?>
                     <tr

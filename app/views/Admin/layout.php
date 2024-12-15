@@ -121,17 +121,17 @@
                     </div>
                     <ul class="space-y-2">
                         <li>
-                            <a href="<?php echo UrlAction::action('admin', 'post', 'report'); ?>"
+                            <a href="<?php echo UrlAction::action('admin', 'report'); ?>"
                                 class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
                                 <i class="ri-line-chart-fill mr-2 text-lg"></i>
-                                <span>Thống kê bài viết</span>
+                                <span>Thống kê chi tiết</span>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo UrlAction::action('admin', 'user', 'report'); ?>"
+                            <a href="<?php echo UrlAction::action('admin', 'report', 'time'); ?>"
                                 class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
                                 <i class="ri-bar-chart-2-fill mr-2 text-lg"></i>
-                                <span>Thống kê người dùng</span>
+                                <span>Thống kê theo thời gian</span>
                             </a>
                         </li>
                     </ul>

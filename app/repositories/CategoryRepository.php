@@ -66,7 +66,19 @@ class CategoryRepository
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function getAll()
+    {
+        $query = "
+            SELECT 
+                c.id, 
+                c.title
+            FROM categories c
+            GROUP BY c.id, c.title";
+        $stmt = $this->_db->prepare($query);
+        $stmt->execute();
 
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
 
     public function getCategoryDetailsById($categoryId, $limit, $page)
     {

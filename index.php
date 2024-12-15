@@ -64,7 +64,7 @@ $authService = new Services\AuthService($userRepository, $jwtToken);
 $userController = new Controllers\UserController($userService, $roleRepository);
 $roleController = new Controllers\RoleController($roleService);
 $categoryController = new Controllers\CategoryController($categoryService);
-$postController = new Controllers\PostController($postService, $categoryRepository, $userRepository);
+$postController = new Controllers\PostController($postService, $userService, $categoryService, $categoryRepository, $userRepository);
 $commentController = new Controllers\CommentController($commentService);
 
 $adminController = new Controllers\AdminController($roleService, $userService);

@@ -32,5 +32,13 @@ class PostRouter
             'controller' => 'PostController',
             'action' => 'update',
         ]);
+        $router->add('admin/post/report', [
+            'controller' => 'PostController',
+            'action' => 'report',
+        ]);
+        $router->add('admin/post/search', [
+            'controller' => 'PostController',
+            'action' => 'search',
+        ]);
     }
 }

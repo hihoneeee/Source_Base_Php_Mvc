@@ -5,18 +5,26 @@ namespace App\controllers;
 use App\core\Controller;
 use App\DTOs\Common\PaginationDTO;
 use App\DTOs\Post;
+use App\DTOs\Post\SearchCondition;
 use App\Repositories\CategoryRepository;
 use App\Repositories\UserRepository;
+use App\Services\CategoryService;
 use App\Services\PostService;
+use App\Services\UserService;
 
 class PostController extends Controller
 {
     private $_postService;
+    private $_userService;
+    private $_categoryService;
     private $_categoryRepo;
     private $_userRepo;
-    public function __construct(PostService $postService, CategoryRepository $categoryRepo, UserRepository $userRepo)
+
+    public function __construct(PostService $postService, UserService $userService, CategoryService $categoryService, CategoryRepository $categoryRepo, UserRepository $userRepo)
     {
         $this->_postService = $postService;
+        $this->_categoryService = $categoryService;
+        $this->_userService = $userService;
         $this->_categoryRepo = $categoryRepo;
         $this->_userRepo = $userRepo;
     }
@@ -123,5 +131,39 @@ class PostController extends Controller
         } else {
             $this->redirectToAction('admin', 'post', 'index');
         }
+    }
+
+    public function report()
+    {
+        $categories = $this->_categoryService->getAll();
+        $users = $this->_userService->getAll();
+
+        $this->render('Admin', 'Post/report', [
+            'categories' => $categories,
+            'users' => $users,
+        ]);
+    }
+
+    public function search()
+    {
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $title = isset($_POST['title']) ? $_POST['title'] : '';
+        $userId = isset($_POST['userId']) ? $_POST['userId'] : '';
+        $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
+
+        $condition = new SearchCondition($title, $userId, $categoryId);
+        $condition->setCurrentPage($page);
+        $condition->setIsPagingUse(true);
+
+        $categories = $this->_categoryService->getAll();
+        $users = $this->_userService->getAll();
+        $response = $this->_postService->getListPostsReport($condition);
+
+        $this->render('Admin', 'Post/report', [
+            'posts' => $response,
+            'condition' => $condition,
+            'categories' => $categories,
+            'users' => $users,
+        ]);
     }
 }

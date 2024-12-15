@@ -55,6 +55,7 @@
                                 <li class="<?php echo $_SERVER['REQUEST_URI'] === '/' ? 'active' : ''; ?>">
                                     <a href="/">Trang Chủ</a>
                                 </li>
+                                <?php if (isset($categories)) { ?>
                                 <?php foreach ($categories as $category): ?>
                                 <?php $categoryUrl = "/danh-muc/" . $category->id; ?>
                                 <li class="<?php echo $_SERVER['REQUEST_URI'] === $categoryUrl ? 'active' : ''; ?>">
@@ -63,6 +64,7 @@
                                     </a>
                                 </li>
                                 <?php endforeach; ?>
+                                <?php } ?>
                             </ul>
                         </div>
                         <div class="col-2 text-end d-flex gap-2 align-items-center">

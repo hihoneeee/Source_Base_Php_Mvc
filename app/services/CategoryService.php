@@ -22,6 +22,11 @@ class CategoryService
         $this->_mapper = $mapper;
     }
 
+    public function getAll()
+    {
+        return $this->_categoryRepo->getAll();
+    }
+
     public function getAllCategories($limit, $page, $name)
     {
         $response = new ServiceResponse();

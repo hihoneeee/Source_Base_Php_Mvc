@@ -41,6 +41,11 @@ class UserService
         return $response;
     }
 
+    public function getAll()
+    {
+        return $this->_userRepo->getAll();
+    }
+
     public function deleteUser($id)
     {
         $response = new ServiceResponse();

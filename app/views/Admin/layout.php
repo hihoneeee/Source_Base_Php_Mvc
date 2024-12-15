@@ -114,6 +114,27 @@
                             </a>
                         </li>
                     </ul>
+
+                    <div
+                        class="text-xs font-bold uppercase p-4 bg-[#1a2226] text-[#4b646f] dark:bg-gray-800 dark:border-gray-700">
+                        Thống kê & Báo cáo
+                    </div>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="<?php echo UrlAction::action('admin', 'report'); ?>"
+                                class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                                <i class="ri-line-chart-fill mr-2 text-lg"></i>
+                                <span>Thống kê chi tiết</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo UrlAction::action('admin', 'report', 'time'); ?>"
+                                class="flex items-center p-2 text-base font-medium text-white rounded-lg hover:bg-gray-700">
+                                <i class="ri-bar-chart-2-fill mr-2 text-lg"></i>
+                                <span>Thống kê theo thời gian</span>
+                            </a>
+                        </li>
+                    </ul>
                 <?php endif; ?>
 
                 <div

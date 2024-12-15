@@ -60,7 +60,7 @@ use App\Helpers\UrlAction;
                         class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         value="<?php echo htmlspecialchars($post->title ?? ''); ?>">
                     <?php if (!empty($errors['title'])): ?>
-                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['title']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['title']); ?></p>
                     <?php endif; ?>
                 </div>
 
@@ -70,7 +70,7 @@ use App\Helpers\UrlAction;
                     <textarea name="meta" id="meta" placeholder="Nhập mô tả..."
                         class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><?php echo htmlspecialchars($post->meta ?? ''); ?></textarea>
                     <?php if (!empty($errors['meta'])): ?>
-                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['meta']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['meta']); ?></p>
                     <?php endif; ?>
                 </div>
 
@@ -80,7 +80,7 @@ use App\Helpers\UrlAction;
                     <textarea name="content" id="content"
                         class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><?php echo htmlspecialchars($post->content ?? ''); ?></textarea>
                     <?php if (!empty($errors['content'])): ?>
-                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['content']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['content']); ?></p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -94,39 +94,39 @@ use App\Helpers\UrlAction;
                         value="<?php echo htmlspecialchars($userFullName); ?>">
                 </div>
 
-                <div>
-                    <label class="block text-white font-medium mb-2" for="category_id">Chuyên mục bài viết</label>
-                    <select name="category_id" id="category_id"
-                        class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div class="relative w-full">
+                    <label for="search-categoryId" class="sr-only">Danh mục</label>
+                    <select id="search-categoryId" name="categoryId"
+                        class="block w-full p-4 text-sm border rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="">-- Chọn danh mục --</option>
                         <?php foreach ($categories as $category): ?>
-                        <option value="<?php echo $category->id; ?>"
-                            <?php echo isset($post) && $post->category_id === $category->id ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($category->title); ?>
-                        </option>
+                            <option value="<?php echo htmlspecialchars($category['id']); ?>"
+                                <?php echo (isset($condition->categoryId) && $condition->categoryId == $category['id']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($category['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-
 
                 <div>
                     <label class="block text-white font-medium mb-2" for="status">Trạng thái</label>
                     <select name="status" id="status"
                         class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <?php if ($_SESSION['user_info']->role === 'Admin'): ?>
-                        <option value="pending"
-                            <?php echo isset($post) && $post->status === 'pending' ? 'selected' : ''; ?>>
-                            Nháp</option>
-                        <option value="completed"
-                            <?php echo isset($post) && $post->status === 'completed' ? 'selected' : ''; ?>>
-                            Duyệt</option>
-                        <option value="hidden"
-                            <?php echo isset($post) && $post->status === 'hidden' ? 'selected' : ''; ?>>
-                            Ẩn</option>
+                            <option value="pending"
+                                <?php echo isset($post) && $post->status === 'pending' ? 'selected' : ''; ?>>
+                                Nháp</option>
+                            <option value="completed"
+                                <?php echo isset($post) && $post->status === 'completed' ? 'selected' : ''; ?>>
+                                Duyệt</option>
+                            <option value="hidden"
+                                <?php echo isset($post) && $post->status === 'hidden' ? 'selected' : ''; ?>>
+                                Ẩn</option>
                         <?php else: ?>
-                        <option value="pending"
-                            <?php echo isset($post) && $post->status === 'pending' ? 'selected' : ''; ?>>
-                            Nháp
-                        </option>
+                            <option value="pending"
+                                <?php echo isset($post) && $post->status === 'pending' ? 'selected' : ''; ?>>
+                                Nháp
+                            </option>
                         <?php endif; ?>
                     </select>
                 </div>
@@ -138,13 +138,13 @@ use App\Helpers\UrlAction;
                         class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         onchange="previewImage(event)">
                     <?php if (isset($post) && !empty($post->avatar)): ?>
-                    <img id="imagePreview" src="/App/Public/Uploads/post/<?php echo htmlspecialchars($post->avatar); ?>"
-                        alt="Ảnh bài viết" class="mt-4 max-h-48">
+                        <img id="imagePreview" src="/App/Public/Uploads/post/<?php echo htmlspecialchars($post->avatar); ?>"
+                            alt="Ảnh bài viết" class="mt-4 max-h-48">
                     <?php else: ?>
-                    <img id="imagePreview" src="#" alt="Preview ảnh" class="hidden mt-4 max-h-48">
+                        <img id="imagePreview" src="#" alt="Preview ảnh" class="hidden mt-4 max-h-48">
                     <?php endif; ?>
                     <?php if (!empty($errors['avatar'])): ?>
-                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['avatar']); ?></p>
                     <?php endif; ?>
                 </div>
             </div>

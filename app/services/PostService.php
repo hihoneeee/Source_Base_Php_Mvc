@@ -8,6 +8,7 @@ use App\Helpers\ServiceResponse;
 use App\Helpers\ServiceResponseExtensions;
 use App\Data\Models\Post;
 use App\DTOs\Post as PostDTO;
+use App\DTOs\Post\SearchCondition;
 use App\Repositories\CategoryRepository;
 use Exception;
 
@@ -216,5 +217,15 @@ class PostService
             ServiceResponseExtensions::setError($response, $ex->getMessage());
         }
         return $response;
+    }
+
+    public function getListPostsReport(SearchCondition $condition)
+    {
+        return $this->_postRepo->getListPostsReport($condition);
+    }
+
+    public function getListReportByTime(SearchCondition $condition)
+    {
+        return $this->_postRepo->getListReportByTime($condition);
     }
 }

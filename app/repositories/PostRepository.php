@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Data\Models\Post;
+use App\DTOs\Post\SearchCondition;
 use PDO;
 
 class PostRepository
@@ -274,5 +275,126 @@ class PostRepository
         $stmt = $this->_db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
+    }
+
+    public function getListPostsReport(SearchCondition $condition)
+    {
+        $offset = ($condition->getCurrentPage() - 1) * LIMIT;
+        $limit = LIMIT;
+
+        // Dynamically add limit and offset directly into the query
+        $sql = $this->createSqlGetListPostsReport(
+            $condition->title,
+            $condition->userId,
+            $condition->categoryId
+        );
+
+
+        $sql .= " LIMIT $offset, $limit";
+
+        $stmt = $this->_db->prepare($sql);
+
+        $params = [];
+
+        if (!empty($condition->title)) {
+            $params['title'] = "%" . $condition->title . "%";
+        }
+
+        if (!empty($condition->userId)) {
+            $params['userId'] = $condition->userId;
+        }
+
+        if (!empty($condition->categoryId)) {
+            $params['categoryId'] = $condition->categoryId;
+        }
+
+        // Execute query with bound parameters
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function createSqlGetListPostsReport($title = null, $userId = null, $categoryId = null)
+    {
+        $sql = "
+            SELECT 
+                p.*, 
+                CONCAT(u.first_name, ' ', u.last_name) AS fullName,
+                pd.title, 
+                pd.meta,
+                c.title AS category
+            FROM posts p
+            JOIN users u ON p.user_id = u.id
+            JOIN postdetail pd ON p.id = pd.post_id
+            JOIN categories c ON p.category_id = c.id
+            WHERE 1=1
+        ";
+
+        if (!empty($title)) {
+            $sql .= " AND pd.title LIKE :title";
+        }
+
+        if (!empty($userId)) {
+            $sql .= " AND p.user_id = :userId";
+        }
+
+        if (!empty($categoryId)) {
+            $sql .= " AND p.category_id = :categoryId";
+        }
+
+        return $sql;
+    }
+
+    public function getListReportByTime(SearchCondition $condition)
+    {
+        $offset = ($condition->getCurrentPage() - 1) * LIMIT;
+        $limit = LIMIT;
+
+        // Dynamically add limit and offset directly into the query
+        $sql = $this->createSqlgetListReportByTime(
+            $condition->time
+        );
+        $sql .= " LIMIT $offset, $limit";
+        $stmt = $this->_db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function createSqlgetListReportByTime($time = null)
+    {
+        $sql = "
+            SELECT ";
+
+        if (!empty($time) && $time == "2") {
+            $sql .= "
+                YEAR(p.created_at) AS year,
+            ";
+        } else {
+            $sql .= "
+                MONTH(p.created_at) AS month,
+            ";
+        }
+
+        $sql .= "
+                COUNT(p.id) AS post_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.id
+            JOIN postdetail pd ON p.id = pd.post_id
+            JOIN categories c ON p.category_id = c.id
+        ";
+
+        if (!empty($time) && $time == "2") {
+            $sql .= "
+            GROUP BY YEAR(p.created_at)
+            ORDER BY year DESC
+            ";
+        } else {
+            $sql .= "
+            GROUP BY MONTH(p.created_at)
+            ORDER BY month DESC
+            ";
+        }
+
+        return $sql;
     }
 }

@@ -56,6 +56,19 @@ class UserRepository
 
         return ['users' => $users, 'total' => $total];
     }
+
+    public function getAll()
+    {
+        $query = "
+            SELECT u.id, 
+            CONCAT(u.first_name, ' ', u.last_name) AS fullname
+            FROM users u
+        ";
+        $stmt = $this->_db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function getUserById($id)
     {
         $query = "SELECT u.*, r.value AS value

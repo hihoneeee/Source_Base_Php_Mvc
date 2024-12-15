@@ -5,18 +5,26 @@ namespace App\controllers;
 use App\core\Controller;
 use App\DTOs\Common\PaginationDTO;
 use App\DTOs\Post;
+use App\DTOs\Post\SearchCondition;
 use App\Repositories\CategoryRepository;
 use App\Repositories\UserRepository;
+use App\Services\CategoryService;
 use App\Services\PostService;
+use App\Services\UserService;
 
 class PostController extends Controller
 {
     private $_postService;
+    private $_userService;
+    private $_categoryService;
     private $_categoryRepo;
     private $_userRepo;
-    public function __construct(PostService $postService, CategoryRepository $categoryRepo, UserRepository $userRepo)
+
+    public function __construct(PostService $postService, UserService $userService, CategoryService $categoryService, CategoryRepository $categoryRepo, UserRepository $userRepo)
     {
         $this->_postService = $postService;
+        $this->_categoryService = $categoryService;
+        $this->_userService = $userService;
         $this->_categoryRepo = $categoryRepo;
         $this->_userRepo = $userRepo;
     }

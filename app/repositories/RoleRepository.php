@@ -13,27 +13,30 @@ class RoleRepository
     {
         $this->_db = $db;
     }
-    public function getAllRoles($limit, $page, $name)
+    public function getAllRoles($limit = null, $page = null, $name = null)
     {
         $offset = ($page - 1) * $limit;
-
-        // Xây dựng truy vấn lấy danh sách roles
         $query = "SELECT * FROM roles r";
         if (!empty($name)) {
             $query .= " WHERE r.value LIKE :name";
         }
-        $query .= " ORDER BY r.updated_at DESC LIMIT :limit OFFSET :offset";
+        $query .= " ORDER BY r.updated_at DESC";
+        if (!empty($limit)) {
+            $query .= " LIMIT :limit OFFSET :offset";
+        }
+
         $stmt = $this->_db->prepare($query);
         if (!empty($name)) {
             $nameParam = '%' . $name . '%';
             $stmt->bindValue(':name', $nameParam, PDO::PARAM_STR);
         }
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        if (!empty($limit)) {
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        }
         $stmt->execute();
         $roles = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        // Tính tổng số roles với điều kiện tìm kiếm (nếu có)
         $totalQuery = "SELECT COUNT(*) AS total FROM roles";
         if (!empty($name)) {
             $totalQuery .= " WHERE value LIKE :name";
@@ -47,6 +50,7 @@ class RoleRepository
 
         return ['roles' => $roles, 'total' => $total];
     }
+
 
     public function getListRole()
     {

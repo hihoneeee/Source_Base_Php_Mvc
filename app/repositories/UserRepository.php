@@ -13,61 +13,90 @@ class UserRepository
     {
         $this->_db = $db;
     }
-    public function getAllUsers($limit, $page, $name)
+    public function getAllUsers($limit, $page, $name, $roleId = null)
     {
         $offset = ($page - 1) * $limit;
 
+        // Bắt đầu câu truy vấn
         $query = "SELECT u.id, u.email, u.first_name, u.last_name, r.value
                   FROM users u
                   JOIN roles r ON u.role_id = r.id";
 
+        // Điều kiện WHERE động
+        $conditions = [];
         if (!empty($name)) {
-            $query .= " WHERE u.first_name LIKE :name OR u.last_name LIKE :name";
+            $conditions[] = "(u.first_name LIKE :name OR u.last_name LIKE :name)";
+        }
+        if (!empty($roleId)) {
+            $conditions[] = "u.role_id != :roleId";
+        }
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
         }
 
         $query .= " ORDER BY u.updated_at DESC LIMIT :limit OFFSET :offset";
 
         $stmt = $this->_db->prepare($query);
 
+        // Gắn giá trị tham số
         if (!empty($name)) {
             $nameParam = '%' . $name . '%';
             $stmt->bindValue(':name', $nameParam, \PDO::PARAM_STR);
         }
-
+        if (!empty($roleId)) {
+            $stmt->bindValue(':roleId', $roleId, \PDO::PARAM_INT);
+        }
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         $users = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        $totalQuery = "SELECT COUNT(*) AS total FROM users u";
-        if (!empty($name)) {
-            $totalQuery .= " WHERE u.first_name LIKE :name OR u.last_name LIKE :name";
+        // Câu truy vấn tính tổng
+        $totalQuery = "SELECT COUNT(*) AS total FROM users u
+                       JOIN roles r ON u.role_id = r.id";
+
+        if (!empty($conditions)) {
+            $totalQuery .= " WHERE " . implode(" AND ", $conditions);
         }
 
         $totalStmt = $this->_db->prepare($totalQuery);
 
+        // Gắn giá trị tham số cho câu truy vấn tổng
         if (!empty($name)) {
-            $totalStmt->bindValue(':name', $nameParam, PDO::PARAM_STR);
+            $totalStmt->bindValue(':name', $nameParam, \PDO::PARAM_STR);
         }
-
+        if (!empty($roleId)) {
+            $totalStmt->bindValue(':roleId', $roleId, \PDO::PARAM_INT);
+        }
         $totalStmt->execute();
         $total = $totalStmt->fetchColumn();
 
         return ['users' => $users, 'total' => $total];
     }
 
-    public function getAll()
+
+    public function getAll($roleId = null)
     {
         $query = "
             SELECT u.id, 
             CONCAT(u.first_name, ' ', u.last_name) AS fullname
             FROM users u
         ";
+
+        if (!empty($roleId)) {
+            $query .= " WHERE u.role_id != :roleId";
+        }
+
         $stmt = $this->_db->prepare($query);
+        if (!empty($roleId)) {
+            $stmt->bindValue(':roleId', $roleId, \PDO::PARAM_INT);
+        }
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
 
     public function getUserById($id)
     {

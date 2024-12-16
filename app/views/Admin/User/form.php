@@ -50,7 +50,7 @@ use App\Helpers\UrlAction;
                     class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value="<?php echo htmlspecialchars($user->first_name ?? ''); ?>">
                 <?php if (!empty($errors['first_name'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['first_name']); ?></p>
+                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['first_name']); ?></p>
                 <?php endif; ?>
             </div>
             <div class="w-[50%]">
@@ -59,7 +59,7 @@ use App\Helpers\UrlAction;
                     class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value="<?php echo htmlspecialchars($user->last_name ?? ''); ?>">
                 <?php if (!empty($errors['last_name'])): ?>
-                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['last_name']); ?></p>
+                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['last_name']); ?></p>
                 <?php endif; ?>
             </div>
         </div>
@@ -69,18 +69,18 @@ use App\Helpers\UrlAction;
                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value="<?php echo htmlspecialchars($user->email ?? ''); ?>">
             <?php if (!empty($errors['email'])): ?>
-            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
+                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
             <?php endif; ?>
         </div>
         <?php if (!isset($user)): ?>
-        <div>
-            <label class="block text-white font-medium mb-2" for="password">Mật khẩu</label>
-            <input type="text" name="password" id="password" placeholder="••••••••"
-                class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <?php if (!empty($errors['password'])): ?>
-            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
-            <?php endif; ?>
-        </div>
+            <div>
+                <label class="block text-white font-medium mb-2" for="password">Mật khẩu</label>
+                <input type="text" name="password" id="password" placeholder="••••••••"
+                    class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <?php if (!empty($errors['password'])): ?>
+                    <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
 
         <div>
@@ -89,14 +89,14 @@ use App\Helpers\UrlAction;
                 class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Chọn vai trò</option>
                 <?php foreach ($roles as $role): ?>
-                <option value="<?php echo htmlspecialchars($role->id); ?>"
-                    <?php echo (isset($user) && $user->role_id == $role->id) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($role->value); ?>
-                </option>
+                    <option value="<?php echo htmlspecialchars($role->id); ?>"
+                        <?php echo (isset($user) && $user->role_id == $role->id) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($role->value); ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <?php if (!empty($errors['role_id'])): ?>
-            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['role_id']); ?></p>
+                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['role_id']); ?></p>
             <?php endif; ?>
         </div>
 

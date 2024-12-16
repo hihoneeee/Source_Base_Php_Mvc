@@ -34,11 +34,11 @@ $mapper = new Core\Mapper();
 // Cấu hình JWT
 
 // Khởi tạo Repository và Service
-$userRepository = new Repositories\UserRepository($db);
-$userService = new Services\UserService($userRepository, $mapper);
-
 $roleRepository = new Repositories\RoleRepository($db);
 $roleService = new Services\RoleService($roleRepository, $mapper);
+
+$userRepository = new Repositories\UserRepository($db);
+$userService = new Services\UserService($userRepository, $roleRepository, $mapper);
 
 $fakeDataRepository = new Repositories\FakeDataRepository($db);
 $fakeDataService = new Services\FakeDataService($fakeDataRepository);
@@ -63,10 +63,10 @@ $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 $authService = new Services\AuthService($userRepository, $jwtToken);
 
 // Khởi tạo Controller với Service tương ứng
-$userController = new Controllers\UserController($userService, $roleRepository);
+$userController = new Controllers\UserController($userService, $roleService);
 $roleController = new Controllers\RoleController($roleService);
 $categoryController = new Controllers\CategoryController($categoryService);
-$postController = new Controllers\PostController($postService, $userService, $categoryService, $categoryRepository, $userRepository);
+$postController = new Controllers\PostController($postService, $categoryService, $userRepository);
 $commentController = new Controllers\CommentController($commentService);
 $reportController = new Controllers\ReportController($postService, $userService, $categoryService);
 

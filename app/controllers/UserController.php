@@ -8,17 +8,17 @@ use App\DTOs\User\CreateUserDTO;
 use App\DTOs\User\UpdateProfileUserDTO;
 use App\DTOs\User\UpdateUserDTO;
 use App\Helpers\JwtToken;
-use App\repositories\RoleRepository;
+use App\Services\RoleService;
 use App\Services\UserService;
 
 class UserController extends Controller
 {
     private $_userService;
-    private $_roleRepo;
-    public function __construct(UserService $userService, RoleRepository $roleRepo)
+    private $_roleService;
+    public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->_userService = $userService;
-        $this->_roleRepo = $roleRepo;
+        $this->_roleService = $roleService;
     }
 
     public function index()
@@ -58,7 +58,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $dataRole = $this->_roleRepo->getListRole();
+        $dataRole = $this->_roleService->getAllRoles();
         $this->render('Admin', 'User/form', ['roles' => $dataRole]);
     }
 
@@ -81,10 +81,16 @@ class UserController extends Controller
     public function edit($id)
     {
         $response = $this->_userService->getUserById($id);
+        $role = $this->_roleService->getRoleByValue('Admin');
+        if ($response->data->role_id == $role->data->id) {
+            $_SESSION['toastMessage'] = 'Không thể truy cập';
+            $_SESSION['toastSuccess'] = false;
+            $this->redirectToAction('admin', 'user', 'index');
+        }
         if ($response->success) {
-            $dataRole = $this->_roleRepo->getListRole();
+            $dataRole = $this->_roleService->getAllRoles();
             $user = $response->data;
-            $this->render('Admin', 'User/form', ['user' => $user, 'roles' => $dataRole]);
+            $this->render('Admin', 'User/form', ['user' => $user, 'roles' => $dataRole->data]);
         } else {
             $this->render('Admin', 'Home/error', ['message' => $response->message]);
         }

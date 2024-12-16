@@ -12,24 +12,28 @@ use App\DTOs\User\UpdateProfileUserDTO;
 use App\Helpers\HandleFileUpload;
 use App\Helpers\HashPassword;
 use App\Helpers\JwtToken;
+use App\Repositories\RoleRepository;
 use Exception;
 
 class UserService
 {
     private $_userRepo;
     private $_mapper;
+    private $_roleRepo;
 
-    public function __construct(UserRepository $userRepo,  Mapper $mapper)
+    public function __construct(UserRepository $userRepo, RoleRepository $roleRepo, Mapper $mapper)
     {
         $this->_userRepo = $userRepo;
         $this->_mapper = $mapper;
+        $this->_roleRepo = $roleRepo;
     }
 
     public function getAllUsers($limit, $page, $name)
     {
         $response = new ServiceResponse();
         try {
-            $data = $this->_userRepo->getAllUsers($limit, $page, $name);
+            $role = $this->_roleRepo->getRoleByValue('Admin');
+            $data = $this->_userRepo->getAllUsers($limit, $page, $name, $role->id);
             $response->data = $data['users'];
             $response->total = $data['total'];
             $response->limit = $limit;
@@ -42,7 +46,8 @@ class UserService
     }
     public function getAll()
     {
-        return $this->_userRepo->getAll();
+        $role = $this->_roleRepo->getRoleByValue('User');
+        return $this->_userRepo->getAll($role->id);
     }
 
     public function deleteUser($id)
@@ -144,6 +149,11 @@ class UserService
             $checkUser = $this->_userRepo->getUserById($id);
             if ($checkUser === null) {
                 ServiceResponseExtensions::setNotFound($response, "Người dùng");
+                return $response;
+            }
+            $role = $this->_roleRepo->getRoleByValue('Admin');
+            if ($checkUser->role_id == $role->id) {
+                ServiceResponseExtensions::setUnauthorized($response, "Không thể chỉnh sửa người này!");
                 return $response;
             }
             if ($checkUser->email === $updateUserDTO->email) {

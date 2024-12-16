@@ -20,5 +20,9 @@ class AuthRouter
             'controller' => 'AuthController',
             'action' => 'Logout',
         ]);
+        $router->add('forgot-password-verify', [
+            'controller' => 'AuthController',
+            'action' => 'ForgotPassword',
+        ]);
     }
 }

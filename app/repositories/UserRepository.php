@@ -165,6 +165,20 @@ class UserRepository
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function updatePassowrd($id, $password, $updatedAt)
+    {
+        $query = "UPDATE users 
+                  SET password = :password, 
+                      updated_at = :updated_at 
+                  WHERE id = :id";
+        $stmt = $this->_db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':updated_at', $updatedAt);
+        return $stmt->execute();
+    }
+
     public function deleteUserById($id)
     {
         $query = "DELETE FROM users WHERE id = :id";

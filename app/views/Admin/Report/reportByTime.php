@@ -47,7 +47,8 @@ use App\Helpers\UrlAction;
         <?php endif; ?>
 
         <!-- Nút tìm kiếm -->
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2">
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm p-2 w-[18%]">
             Tìm kiếm
         </button>
     </form>
@@ -57,8 +58,7 @@ use App\Helpers\UrlAction;
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <!-- Conditionally render columns based on selected time -->
-                <?php if ($condition->time == "1"): ?>
+                <?php if (isset($condition) && $condition->time === "1"): ?>
                     <th scope="col" class="px-6 py-3 text-center">Tháng</th>
                 <?php else: ?>
                     <th scope="col" class="px-6 py-3 text-center">Năm</th>

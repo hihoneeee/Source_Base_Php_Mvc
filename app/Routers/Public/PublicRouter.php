@@ -52,5 +52,9 @@ class PublicRouter
             'controller' => 'PublicController',
             'action' => 'Profile',
         ]);
+        $router->add('quen-mat-khau', [
+            'controller' => 'PublicController',
+            'action' => 'ForgotPassword',
+        ]);
     }
 }

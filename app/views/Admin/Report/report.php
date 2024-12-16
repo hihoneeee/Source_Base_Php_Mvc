@@ -95,14 +95,17 @@ use App\Helpers\UrlAction;
             <?php if (!empty($posts)): ?>
                 <!-- Nút xuất report chỉ hiển thị nếu có dữ liệu -->
                 <div class="flex justify-end mb-4">
-                <form method="post" action="/admin/report/generator" class="inline">
-                <input type="hidden" name="title" value="<?php echo htmlspecialchars($condition->title ?? ''); ?>">
-                <input type="hidden" name="userId" value="<?php echo htmlspecialchars($condition->userId ?? ''); ?>">
-                <input type="hidden" name="categoryId" value="<?php echo htmlspecialchars($condition->categoryId ?? ''); ?>">
-                <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
-                    Xuất báo cáo
-                </button>
-            </form>
+                    <form method="post" action="/admin/report/generator" class="inline">
+                        <input type="hidden" name="title" value="<?php echo htmlspecialchars($condition->title ?? ''); ?>">
+                        <input type="hidden" name="userId"
+                            value="<?php echo htmlspecialchars($condition->userId ?? ''); ?>">
+                        <input type="hidden" name="categoryId"
+                            value="<?php echo htmlspecialchars($condition->categoryId ?? ''); ?>">
+                        <button type="submit"
+                            class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
+                            Xuất báo cáo
+                        </button>
+                    </form>
                 </div>
                 <?php foreach ($posts as $post): ?>
                     <tr

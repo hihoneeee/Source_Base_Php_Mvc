@@ -228,4 +228,38 @@ class PostService
     {
         return $this->_postRepo->getListReportByTime($condition);
     }
+
+    public function getRandomPosts()
+    {
+        $response = new ServiceResponse();
+        try {
+            $checkPosts = $this->_postRepo->getRandomPosts();
+            if ($checkPosts == null) {
+                ServiceResponseExtensions::setNotFound($response, "Bài viết");
+                return $response;
+            }
+            $response->data = $checkPosts;
+            ServiceResponseExtensions::setSuccess($response, "Lấy danh sách thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
+
+    public function getPostsByCategoryId($categoryId)
+    {
+        $response = new ServiceResponse();
+        try {
+            $checkPosts = $this->_postRepo->getPostsByCategoryId($categoryId);
+            if ($checkPosts == null) {
+                ServiceResponseExtensions::setNotFound($response, "Bài viết");
+                return $response;
+            }
+            $response->data = $checkPosts;
+            ServiceResponseExtensions::setSuccess($response, "Lấy danh sách thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
 }

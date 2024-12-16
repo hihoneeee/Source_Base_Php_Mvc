@@ -55,6 +55,8 @@ $postService = new Services\PostService($postRepository, $mapper, $categoryRepos
 $commentRepository = new Repositories\CommentRepository($db);
 $commentService = new Services\CommentService($commentRepository, $mapper, $postDetailRepository);
 
+$sendMailService = new Services\SendMailService();
+
 // Khởi tạo hepler
 $jwtToken = new JwtToken(JWT_SECRET, $roleRepository, $userRepository);
 
@@ -69,9 +71,9 @@ $commentController = new Controllers\CommentController($commentService);
 $reportController = new Controllers\ReportController($postService, $userService, $categoryService);
 
 $adminController = new Controllers\AdminController($roleService, $userService);
-$authController = new Controllers\AuthController($authService);
+$authController = new Controllers\AuthController($authService, $sendMailService);
 $fakeDataController = new Controllers\FakeDataController($fakeDataService);
-$publicController = new Controllers\PublicController($categoryRepository, $categoryService, $postRepository, $postService, $authService, $roleRepository, $userService, $commentService);
+$publicController = new Controllers\PublicController($categoryService, $roleService, $postService, $authService, $userService, $commentService);
 
 // Khởi tạo middleware
 $authMiddleware = new AuthMiddleware();

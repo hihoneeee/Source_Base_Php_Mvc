@@ -71,4 +71,26 @@ class AuthService
         }
         return $response;
     }
+
+    public function forgotPassword($email)
+    {
+        $response = new ServiceResponse();
+        try {
+            $existsEmail = $this->_userRepo->getUserByEmail($email);
+            if ($existsEmail == null) {
+                ServiceResponseExtensions::setNotFound($response, "Không tồn tại email!");
+                return $response;
+            }
+            $randomPassword = HashPassword::generateRandomPassword(8);
+            $hashNewPassword = HashPassword::GenerateHash($randomPassword);
+            $this->_userRepo->updatePassowrd($existsEmail->id, $hashNewPassword, date('Y-m-d H:i:s'));
+
+            $response->data = $randomPassword;
+            ServiceResponseExtensions::setSuccess($response, "Đổi mật khẩu thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+
+        return $response;
+    }
 }

@@ -24,6 +24,7 @@ class AuthMiddleware
         $publicPaths = [
             'dang-nhap',
             'dang-ky',
+            'quen-mat-khau',
         ];
 
         // Các đường dẫn yêu cầu đã đăng nhập

@@ -22,9 +22,21 @@ class CategoryService
         $this->_mapper = $mapper;
     }
 
-    public function getAll()
+    public function getListCategories()
     {
-        return $this->_categoryRepo->getAll();
+        $response = new ServiceResponse();
+        try {
+            $data = $this->_categoryRepo->getListCategories();
+            if ($data == null) {
+                ServiceResponseExtensions::setNotFound($response, "Danh mục");
+                return $response;
+            }
+            $response->data = $data;
+            ServiceResponseExtensions::setSuccess($response, "Lấy danh sách danh mục thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
     }
 
     public function getAllCategories($limit, $page, $name)
@@ -42,6 +54,12 @@ class CategoryService
         }
         return $response;
     }
+
+    public function getAll()
+    {
+        return $this->_categoryRepo->getListCategories();
+    }
+
 
     public function getCategoryDetailsById($id, $limit, $page)
     {

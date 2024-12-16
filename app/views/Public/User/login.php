@@ -10,7 +10,7 @@
                     <label for="email" class="form-label fw-semibold">Email</label>
                     <input type="email" name="email" id="email" class="form-control" placeholder="Nhập email...">
                     <?php if (!empty($errors['email'])): ?>
-                        <p class="text-danger"><?php echo htmlspecialchars($errors['email']); ?></p>
+                    <p class="text-danger"><?php echo htmlspecialchars($errors['email']); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-3">
@@ -18,9 +18,9 @@
                     <input type="password" name="password" id="password" class="form-control"
                         placeholder="Nhập mật khẩu...">
                     <?php if (!empty($errors['password'])): ?>
-                        <p class="text-danger">
-                            <?php echo htmlspecialchars($errors['password']); ?>
-                        </p>
+                    <p class="text-danger">
+                        <?php echo htmlspecialchars($errors['password']); ?>
+                    </p>
                     <?php endif; ?>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
@@ -28,6 +28,9 @@
                     Bạn chưa có tài khoản? <a href="/dang-ky" id="toggleToRegister" class="text-primary fw-bold">Đăng
                         ký
                         ngay!</a>
+                </p>
+                <p class="text-center mt-3">
+                    <a href="/quen-mat-khau" id="toggleToRegister" class="text-danger fw-bold">Quên mật khẩu?</a>
                 </p>
             </form>
         </div>

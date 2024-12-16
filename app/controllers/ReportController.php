@@ -7,6 +7,7 @@ use App\Services\CategoryService;
 use App\Services\PostService;
 use App\Services\UserService;
 use App\DTOs\Post\SearchCondition;
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -36,8 +37,7 @@ class ReportController extends Controller
 
     public function reportTime()
     {
-        $this->render('Admin', 'Report/reportByTime', [
-        ]);
+        $this->render('Admin', 'Report/reportByTime', []);
     }
 
     public function report()
@@ -72,7 +72,7 @@ class ReportController extends Controller
 
             // Populate rows with data
             $row = 4;
-            foreach ($data as $item) {
+            foreach ($data->data as $item) {
                 $sheet->setCellValue("B{$row}", $item['id']);
                 $sheet->setCellValue("C{$row}", $item['title']);
                 $sheet->setCellValue("D{$row}", $item['fullName']);

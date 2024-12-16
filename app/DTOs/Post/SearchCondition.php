@@ -11,7 +11,7 @@ class SearchCondition extends PaginationDTO
     public $categoryId;
     public $time;
 
-    public function __construct($title, $userId, $categoryId, $time)
+    public function __construct($title, $userId, $categoryId, $time = null)
     {
         $this->title = $title;
         $this->userId = $userId;

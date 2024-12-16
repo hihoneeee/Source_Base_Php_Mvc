@@ -6,48 +6,41 @@ use App\core\Controller;
 use App\DTOs\Auth\AuthLoginDTO;
 use App\DTOs\Common\PaginationDTO;
 use App\DTOs\User\CreateUserDTO;
-use App\Repositories\CategoryRepository;
-use App\Repositories\PostRepository;
-use App\Repositories\RoleRepository;
 use App\Services\AuthService;
 use App\Services\CategoryService;
 use App\Services\CommentService;
 use App\Services\PostService;
+use App\Services\RoleService;
 use App\Services\UserService;
 
 class PublicController extends Controller
 {
-    private $_categoryRepo;
-    private $_postRepo;
     private $_categoryService;
     private $_postService;
     private $_authService;
-    private $_roleRepo;
     private $_userService;
     private $_commentService;
-
-    public function __construct(CategoryRepository $_categoryRepo, CategoryService $categoryService, PostRepository $postRepo, PostService $postService, AuthService $authService, RoleRepository $roleRepo, UserService $userService, CommentService $commentService)
+    private $_roleService;
+    public function __construct(CategoryService $categoryService, RoleService $roleService, PostService $postService, AuthService $authService, UserService $userService, CommentService $commentService)
     {
-        $this->_categoryRepo = $_categoryRepo;
         $this->_categoryService = $categoryService;
-        $this->_postRepo = $postRepo;
         $this->_postService = $postService;
         $this->_authService = $authService;
-        $this->_roleRepo = $roleRepo;
         $this->_userService = $userService;
         $this->_commentService = $commentService;
+        $this->_roleService = $roleService;
     }
     public function Index()
     {
-        $categories = $this->_categoryRepo->getListCategories();
-        $this->render('Public', 'Home/index', ['categories' => $categories]);
+        $categories = $this->_categoryService->getListCategories();
+        $this->render('Public', 'Home/index', ['categories' => $categories->data]);
     }
 
     public function NotFound()
     {
-        $categories = $this->_categoryRepo->getListCategories();
+        $categories = $this->_categoryService->getListCategories();
 
-        $this->render('Public', 'Home/notFound', ['categories' => $categories]);
+        $this->render('Public', 'Home/notFound', ['categories' => $categories->data]);
     }
 
     public function Category($id)
@@ -58,9 +51,9 @@ class PublicController extends Controller
         if ($response->success) {
             $totalPages = ceil($response->total / $limit);
             $paginationDTO = new PaginationDTO($page, $totalPages, "danh-muc/{$id}");
-            $categories = $this->_categoryRepo->getListCategories();
-            $postRandom = $this->_postRepo->getRandomPosts();
-            $this->render('Public', 'Category/index', ['category' => $response->data, 'paginationDTO' => $paginationDTO, 'categories' => $categories, 'postRandom' => $postRandom]);
+            $categories = $this->_categoryService->getListCategories();
+            $postRandom = $this->_postService->getRandomPosts();
+            $this->render('Public', 'Category/index', ['category' => $response->data, 'paginationDTO' => $paginationDTO, 'categories' => $categories->data, 'postRandom' => $postRandom->data]);
         } else {
             $this->redirectToAction('public', '404');
         }
@@ -77,13 +70,13 @@ class PublicController extends Controller
             $totalPages = ceil($commentList->total / $limit);
             $paginationDTO = new PaginationDTO($page, $totalPages, "danh-muc/{$id}");
 
-            $categories = $this->_categoryRepo->getListCategories();
-            $getPostByCategory = $this->_postRepo->getPostsByCategoryId($response->data->dataCategory['id']);
+            $categories = $this->_categoryService->getListCategories();
+            $getPostByCategory = $this->_postService->getPostsByCategoryId($response->data->dataCategory['id']);
 
             $this->render('Public', 'Post/detail', [
                 'postDetail' => $response->data,
-                'categories' => $categories,
-                'getPostByCategory' => $getPostByCategory,
+                'categories' => $categories->data,
+                'getPostByCategory' => $getPostByCategory->data,
                 'commentList' => $commentList->data,
                 'totalComments' => $commentList->total,
                 'paginationDTO' => $paginationDTO,
@@ -95,15 +88,15 @@ class PublicController extends Controller
 
     public function Register()
     {
-        $categories = $this->_categoryRepo->getListCategories();
+        $categories = $this->_categoryService->getListCategories();
 
-        $this->render('Public', 'User/Register', ['categories' => $categories]);
+        $this->render('Public', 'User/Register', ['categories' => $categories->data]);
     }
 
     public function VerifyRegister()
     {
-        $getRole = $this->_roleRepo->getRoleByValue('User');
-        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $getRole->id);
+        $getRole = $this->_roleService->getRoleByValue('User');
+        $createUserDTO = new CreateUserDTO($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['password'], $getRole->data->id);
         if (!$createUserDTO->isValid()) {
             $this->render('Admin', 'User/form', ['errors' => $createUserDTO->errors]);
             return;
@@ -120,11 +113,18 @@ class PublicController extends Controller
         }
     }
 
+    public function ForgotPassword()
+    {
+        $categories = $this->_categoryService->getListCategories();
+
+        $this->render('Public', 'User/forgotPassword', ['categories' => $categories->data]);
+    }
+
     public function Login()
     {
-        $categories = $this->_categoryRepo->getListCategories();
+        $categories = $this->_categoryService->getListCategories();
 
-        $this->render('Public', 'User/Login', ['categories' => $categories]);
+        $this->render('Public', 'User/Login', ['categories' => $categories->data]);
     }
 
     public function VerifyAccount()
@@ -160,10 +160,10 @@ class PublicController extends Controller
 
     public function Profile($id)
     {
-        $categories = $this->_categoryRepo->getListCategories();
+        $categories = $this->_categoryService->getListCategories();
         $response = $this->_userService->getProfileById($id);
         if ($response->success) {
-            $this->render('Public', 'User/profile', ['categories' => $categories, 'user' => $response->data, 'totalPost' => $response->total]);
+            $this->render('Public', 'User/profile', ['categories' => $categories->data, 'user' => $response->data, 'totalPost' => $response->total]);
         } else {
             $this->redirectToAction('public', '404');
         }

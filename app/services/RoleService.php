@@ -54,6 +54,22 @@ class RoleService
         }
         return $response;
     }
+    public function getRoleByValue($value)
+    {
+        $response = new ServiceResponse();
+        try {
+            $role = $this->_roleRepo->getRoleByValue($value);
+            if ($role == null) {
+                ServiceResponseExtensions::setNotFound($response, "Vai trò");
+                return $response;
+            }
+            $response->data = $role;
+            ServiceResponseExtensions::setSuccess($response, "Lấy vai trò thành công!");
+        } catch (Exception $ex) {
+            ServiceResponseExtensions::setError($response, $ex->getMessage());
+        }
+        return $response;
+    }
     public function getRoleDetail($id, RoleDTO\GetRoleDTO $getRoleDto)
     {
         $response = new ServiceResponse();

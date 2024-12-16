@@ -23,7 +23,7 @@ class RoleService
         $this->_mapper = $mapper;
     }
 
-    public function getAllRoles($limit, $page, $name)
+    public function getAllRoles($limit = null, $page = null, $name = null)
     {
         $response = new ServiceResponse();
         try {
@@ -38,6 +38,7 @@ class RoleService
         }
         return $response;
     }
+
     public function getRoleById($id)
     {
         $response = new ServiceResponse();
